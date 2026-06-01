@@ -3,100 +3,114 @@ db,
 storage,
 collection,
 addDoc,
+getDoc,
+doc,
+updateDoc,
 ref,
 uploadBytes,
 getDownloadURL
 } from "./firebase.js";
 
+const params = new URLSearchParams(location.search);
+const editId = params.get("edit");
+
+const titleInput = document.getElementById("title");
+const descInput = document.getElementById("description");
+const rewardInput = document.getElementById("rewardLink");
 const tasksContainer = document.getElementById("tasksContainer");
 
-window.addTask = function(){
+let existingImage = "";
+let taskData = null;
+
+// لو تعديل
+if(editId){
+loadEdit();
+}
+
+async function loadEdit(){
+
+const snap = await getDoc(doc(db,"tasks",editId));
+
+if(!snap.exists()) return;
+
+taskData = snap.data();
+
+titleInput.value = taskData.title;
+descInput.value = taskData.description;
+rewardInput.value = taskData.rewardLink;
+existingImage = taskData.image || "";
+
+// تحميل المهام القديمة
+taskData.tasks.forEach(t=>{
+addTask(t.name, t.link);
+});
+
+}
+
+window.addTask = function(name="", link=""){
 
 const div = document.createElement("div");
-
 div.className = "task";
 
 div.innerHTML = `
-<input class="taskName" placeholder="اسم المهمة">
-<input class="taskLink" placeholder="رابط المهمة">
+<input class="taskName" placeholder="اسم المهمة" value="${name}">
+<input class="taskLink" placeholder="رابط المهمة" value="${link}">
 `;
 
 tasksContainer.appendChild(div);
 
 };
 
-addTask();
-
 window.saveTask = async function(){
 
-const title =
-document.getElementById("title").value;
+let imageUrl = existingImage;
 
-const description =
-document.getElementById("description").value;
-
-const rewardLink =
-document.getElementById("rewardLink").value;
-
-const imageFile =
-document.getElementById("image").files[0];
-
-let imageUrl = "";
+const imageFile = document.getElementById("image").files[0];
 
 if(imageFile){
 
-const imageRef = ref(
-storage,
-"images/" + Date.now()
-);
+const imageRef = ref(storage,"images/"+Date.now());
 
-await uploadBytes(
-imageRef,
-imageFile
-);
+await uploadBytes(imageRef,imageFile);
 
-imageUrl =
-await getDownloadURL(imageRef);
+imageUrl = await getDownloadURL(imageRef);
 
 }
 
 const tasks = [];
 
-document
-.querySelectorAll(".task")
-.forEach(task=>{
+document.querySelectorAll(".task").forEach(t=>{
 
-const name =
-task.querySelector(".taskName").value;
-
-const link =
-task.querySelector(".taskLink").value;
+const name = t.querySelector(".taskName").value;
+const link = t.querySelector(".taskLink").value;
 
 if(name && link){
-
-tasks.push({
-name,
-link
-});
-
+tasks.push({name, link});
 }
 
 });
 
-await addDoc(
-collection(db,"tasks"),
-{
-title,
-description,
-rewardLink,
-image:imageUrl,
+const data = {
+title: titleInput.value,
+description: descInput.value,
+rewardLink: rewardInput.value,
+image: imageUrl,
 tasks,
-createdAt:Date.now()
+createdAt: Date.now()
+};
+
+// لو تعديل
+if(editId){
+await updateDoc(doc(db,"tasks",editId), data);
+alert("تم التعديل");
+location.href = "admin.html";
+return;
 }
-);
+
+// إنشاء جديد
+await addDoc(collection(db,"tasks"), data);
 
 alert("تم الحفظ");
-
 location.reload();
 
 };
