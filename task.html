@@ -2,82 +2,148 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Task</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
-    /* الإعدادات الأساسية والخلفية السوداء مع إضاءة سماوية خافتة */
+    /* نظام المتغيرات (CSS Variables) 
+      ده اللي بيخلينا نغير الألوان بضغطة زرار
+    */
+    :root {
+        --bg-main: #050505;
+        --text-main: #e0f2fe;
+        --glass-bg: rgba(15, 23, 42, 0.4);
+        --glass-border: rgba(0, 242, 254, 0.15);
+        --task-bg: rgba(255, 255, 255, 0.02);
+        --task-hover: rgba(0, 242, 254, 0.05);
+        --primary-glow: rgba(0, 242, 254, 0.4);
+        --btn-open-bg: rgba(0, 242, 254, 0.1);
+        --btn-open-text: #00f2fe;
+        --counter-bg: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+        --counter-text: #000;
+        --bg-glow-1: rgba(0, 242, 254, 0.08);
+        --bg-glow-2: rgba(0, 150, 255, 0.05);
+    }
+
+    /* ألوان الوضع النهاري (Light Mode) */
+    body.light-mode {
+        --bg-main: #f0f8ff;
+        --text-main: #0f172a;
+        --glass-bg: rgba(255, 255, 255, 0.6);
+        --glass-border: rgba(0, 150, 255, 0.3);
+        --task-bg: rgba(255, 255, 255, 0.5);
+        --task-hover: rgba(0, 150, 255, 0.15);
+        --primary-glow: rgba(0, 150, 255, 0.3);
+        --btn-open-bg: rgba(0, 150, 255, 0.15);
+        --btn-open-text: #0284c7;
+        --counter-bg: linear-gradient(135deg, #0284c7 0%, #00f2fe 100%);
+        --counter-text: #fff;
+        --bg-glow-1: rgba(0, 150, 255, 0.1);
+        --bg-glow-2: rgba(0, 242, 254, 0.1);
+    }
+
     body {
         margin: 0;
-        padding: 40px 20px;
+        padding: 0;
         min-height: 100vh;
-        background-color: #050505;
+        background-color: var(--bg-main);
         background-image: 
-            radial-gradient(circle at 15% 50%, rgba(0, 242, 254, 0.08), transparent 40%),
-            radial-gradient(circle at 85% 30%, rgba(0, 150, 255, 0.05), transparent 40%);
-        color: #e0f2fe;
+            radial-gradient(circle at 15% 50%, var(--bg-glow-1), transparent 40%),
+            radial-gradient(circle at 85% 30%, var(--bg-glow-2), transparent 40%);
+        color: var(--text-main);
         font-family: 'Tajawal', sans-serif;
         display: flex;
         justify-content: center;
+        transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    /* حاوية تلم كل المحتوى وتظبطه في النص */
+    .container {
+        width: 100%;
+        max-width: 800px;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* الهيدر اللي شايل العنوان وزرار الإضاءة */
+    .top-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 10px 20px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid var(--glass-border);
+    }
+
+    .page-title {
+        margin: 0;
+        font-size: 1.5rem;
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    /* زرار الإضاءة */
+    .theme-toggle {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 5px;
+        transition: transform 0.3s;
+        box-shadow: none;
+    }
+    .theme-toggle:hover {
+        transform: rotate(20deg) scale(1.1);
     }
 
     /* الحاوية الرئيسية (نص التحميل) */
     #content {
         width: 100%;
-        max-width: 800px;
         font-size: 1.2rem;
-        text-align: center;
-        /* تأثير نبض خفيف أثناء التحميل */
-        animation: pulse 2s infinite; 
     }
 
-    @keyframes pulse {
-        0%, 100% { opacity: 0.7; text-shadow: none; }
-        50% { opacity: 1; text-shadow: 0 0 15px rgba(0, 242, 254, 0.6); }
-    }
-
-    /* تصميم الـ Card (Liquid Glassmorphism) 
-      شفافية + تمويه للخلفية + حدود مضيئة
-    */
     .card {
-        background: rgba(15, 23, 42, 0.4);
+        background: var(--glass-bg);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(0, 242, 254, 0.15);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 242, 254, 0.02);
-        padding: 30px;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(0, 0, 0, 0.02);
+        padding: 25px;
         border-radius: 20px;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         text-align: right;
-        /* تفعيل نظام العد التلقائي للـ Tasks داخل الكارت */
         counter-reset: task-counter; 
-        animation: none; /* إيقاف النبض لأن المحتوى تم تحميله */
+        transition: all 0.4s ease;
     }
 
-    /* تصميم الـ Task مع تأثيرات الـ Hover */
     .task {
         position: relative;
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(0, 242, 254, 0.08);
+        background: var(--task-bg);
+        border: 1px solid var(--glass-border);
         margin: 15px 0;
-        /* مساحة 60 بكسل على اليمين لترك مكان لرقم المهمة */
-        padding: 20px 60px 20px 20px; 
+        padding: 15px 55px 15px 15px; 
         border-radius: 12px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-wrap: wrap; /* عشان الأزرار تنزل سطر في الشاشات الصغيرة لو المكان ضيق */
+        gap: 10px;
     }
 
     .task:hover {
-        background: rgba(0, 242, 254, 0.05);
-        border-color: rgba(0, 242, 254, 0.4);
+        background: var(--task-hover);
+        border-color: var(--primary-glow);
         transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 242, 254, 0.1);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
     }
 
-    /* نظام العد الترتيبي الشيك (أرقام المهام تلقائياً) */
     .task::before {
         counter-increment: task-counter;
         content: counter(task-counter);
@@ -85,60 +151,69 @@
         right: 15px;
         top: 50%;
         transform: translateY(-50%);
-        width: 32px;
-        height: 32px;
-        background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-        color: #000;
+        width: 30px;
+        height: 30px;
+        background: var(--counter-bg);
+        color: var(--counter-text);
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        box-shadow: 0 0 10px var(--primary-glow);
+        transition: all 0.4s ease;
     }
 
-    /* الأزرار الأساسية */
     button {
-        padding: 10px 24px;
+        padding: 8px 20px;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         font-family: inherit;
         font-weight: 700;
-        font-size: 1rem;
+        font-size: 0.95rem;
         transition: all 0.3s ease;
     }
 
-    /* زر Open (سماوي زجاجي) */
     .open {
-        background: rgba(0, 242, 254, 0.1);
-        color: #00f2fe;
-        border: 1px solid #00f2fe;
-        box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
+        background: var(--btn-open-bg);
+        color: var(--btn-open-text);
+        border: 1px solid var(--btn-open-text);
     }
 
     .open:hover {
-        background: #00f2fe;
-        color: #000;
-        box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+        background: var(--btn-open-text);
+        color: var(--bg-main);
+        box-shadow: 0 0 15px var(--primary-glow);
     }
 
-    /* زر Done (أخضر فخم متدرج) */
     .done {
         background: linear-gradient(135deg, #0ba360 0%, #3bc171 100%);
         color: #fff;
         width: 100%;
-        margin-top: 20px;
-        padding: 16px;
-        font-size: 1.2rem;
+        margin-top: 15px;
+        padding: 14px;
+        font-size: 1.1rem;
         letter-spacing: 1px;
-        box-shadow: 0 5px 15px rgba(11, 163, 96, 0.3);
     }
 
     .done:hover {
-        box-shadow: 0 8px 25px rgba(11, 163, 96, 0.5);
-        transform: scale(1.01);
+        box-shadow: 0 8px 20px rgba(11, 163, 96, 0.4);
+        transform: translateY(-2px);
+    }
+
+    /* تعديلات مخصوصة لشاشات الموبايل (Responsive Media Query) */
+    @media (max-width: 600px) {
+        .card { padding: 15px; }
+        .task { 
+            padding: 15px 45px 15px 10px;
+            flex-direction: column;
+            align-items: stretch;
+            text-align: right;
+        }
+        .task::before { right: 10px; width: 25px; height: 25px; font-size: 0.9rem; }
+        .open { width: 100%; margin-top: 10px; }
     }
 </style>
 
@@ -147,8 +222,33 @@
 </head>
 <body>
 
-<div id="content">Loading...</div>
+<div class="container">
+    <header class="top-header">
+        <button id="themeToggle" class="theme-toggle" title="تغيير الإضاءة">☀️</button>
+        <h1 class="page-title">قائمة المهام</h1>
+        <div style="width: 36px;"></div> 
+    </header>
+
+    <div id="content">Loading...</div>
+</div>
 
 <script type="module" src="./js/task.js"></script>
+
+<script>
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const body = document.body;
+
+    themeToggleBtn.addEventListener('click', () => {
+        body.classList.toggle('light-mode');
+        
+        // تغيير الأيقونة حسب الوضع
+        if (body.classList.contains('light-mode')) {
+            themeToggleBtn.textContent = '🌙';
+        } else {
+            themeToggleBtn.textContent = '☀️';
+        }
+    });
+</script>
+
 </body>
 </html>
