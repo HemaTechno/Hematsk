@@ -4,13 +4,142 @@
 <meta charset="UTF-8">
 <title>Task</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
 <style>
-body{background:#0f172a;color:#fff;font-family:tahoma;padding:20px}
-.card{background:#1e293b;padding:15px;border-radius:10px}
-.task{background:#0b1220;margin:10px;padding:10px;border-radius:8px}
-button{padding:8px;border:0;cursor:pointer}
-.open{background:#2563eb;color:#fff}
-.done{background:#16a34a;color:#fff;width:100%;margin-top:10px}
+    /* الإعدادات الأساسية والخلفية السوداء مع إضاءة سماوية خافتة */
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        min-height: 100vh;
+        background-color: #050505;
+        background-image: 
+            radial-gradient(circle at 15% 50%, rgba(0, 242, 254, 0.08), transparent 40%),
+            radial-gradient(circle at 85% 30%, rgba(0, 150, 255, 0.05), transparent 40%);
+        color: #e0f2fe;
+        font-family: 'Tajawal', sans-serif;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* الحاوية الرئيسية (نص التحميل) */
+    #content {
+        width: 100%;
+        max-width: 800px;
+        font-size: 1.2rem;
+        text-align: center;
+        /* تأثير نبض خفيف أثناء التحميل */
+        animation: pulse 2s infinite; 
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 0.7; text-shadow: none; }
+        50% { opacity: 1; text-shadow: 0 0 15px rgba(0, 242, 254, 0.6); }
+    }
+
+    /* تصميم الـ Card (Liquid Glassmorphism) 
+      شفافية + تمويه للخلفية + حدود مضيئة
+    */
+    .card {
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(0, 242, 254, 0.15);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 242, 254, 0.02);
+        padding: 30px;
+        border-radius: 20px;
+        margin-bottom: 30px;
+        text-align: right;
+        /* تفعيل نظام العد التلقائي للـ Tasks داخل الكارت */
+        counter-reset: task-counter; 
+        animation: none; /* إيقاف النبض لأن المحتوى تم تحميله */
+    }
+
+    /* تصميم الـ Task مع تأثيرات الـ Hover */
+    .task {
+        position: relative;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(0, 242, 254, 0.08);
+        margin: 15px 0;
+        /* مساحة 60 بكسل على اليمين لترك مكان لرقم المهمة */
+        padding: 20px 60px 20px 20px; 
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .task:hover {
+        background: rgba(0, 242, 254, 0.05);
+        border-color: rgba(0, 242, 254, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 242, 254, 0.1);
+    }
+
+    /* نظام العد الترتيبي الشيك (أرقام المهام تلقائياً) */
+    .task::before {
+        counter-increment: task-counter;
+        content: counter(task-counter);
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+        color: #000;
+        font-weight: 700;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    }
+
+    /* الأزرار الأساسية */
+    button {
+        padding: 10px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    /* زر Open (سماوي زجاجي) */
+    .open {
+        background: rgba(0, 242, 254, 0.1);
+        color: #00f2fe;
+        border: 1px solid #00f2fe;
+        box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
+    }
+
+    .open:hover {
+        background: #00f2fe;
+        color: #000;
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+    }
+
+    /* زر Done (أخضر فخم متدرج) */
+    .done {
+        background: linear-gradient(135deg, #0ba360 0%, #3bc171 100%);
+        color: #fff;
+        width: 100%;
+        margin-top: 20px;
+        padding: 16px;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(11, 163, 96, 0.3);
+    }
+
+    .done:hover {
+        box-shadow: 0 8px 25px rgba(11, 163, 96, 0.5);
+        transform: scale(1.01);
+    }
 </style>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
