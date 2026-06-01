@@ -116,7 +116,7 @@ if(!captchaPassed){
 
 document.getElementById("captchaBox").innerHTML = `
 <div class="g-recaptcha"
-data-sitekey="YOUR_SITE_KEY"
+data-sitekey="6LewDAgtAAAAACKRpgpu_e9N-YqscgWGb3YCk3GA"
 data-callback="onCaptchaSuccess"></div>
 `;
 
