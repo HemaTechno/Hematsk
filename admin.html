@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الإدارة</title>
+
+<style>
+body{
+    background:#0f172a;
+    color:white;
+    font-family:tahoma;
+    padding:20px;
+}
+
+.loginBox,
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    margin:10px 0;
+}
+
+button{
+    border:none;
+    padding:10px 15px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.login{
+    background:#2563eb;
+    color:white;
+}
+
+.card{
+    background:#1e293b;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+}
+
+.actions{
+    margin-top:15px;
+}
+
+.edit{
+    background:#f59e0b;
+    color:white;
+}
+
+.delete{
+    background:#dc2626;
+    color:white;
+}
+
+.copy{
+    background:#16a34a;
+    color:white;
+}
+
+#panel{
+    display:none;
+}
+</style>
+</head>
+<body>
+
+<div class="loginBox" id="loginBox">
+<h2>تسجيل دخول الإدارة</h2>
+
+<input
+type="password"
+id="password"
+placeholder="كلمة المرور">
+
+<button
+class="login"
+onclick="login()">
+دخول
+</button>
+</div>
+
+<div id="panel" class="container">
+
+<h1>جميع الصفحات</h1>
+
+<div id="tasksList"></div>
+
+</div>
+
+<script type="module" src="./js/admin.js"></script>
+
+</body>
+</html>
