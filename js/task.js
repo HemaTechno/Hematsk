@@ -108,7 +108,7 @@ btn.innerHTML = "✅ تم التحقق";
 btn.style.background = "#16a34a";
 
 // 🔊 صوت النجاح
-const audio = new Audio("success.mp3");
+const audio = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3");
 audio.play();
 }
 
