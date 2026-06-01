@@ -1,103 +1,106 @@
-import {
-db,
-doc,
-getDoc
-} from "./firebase.js";
+import { db, doc, getDoc } from "./firebase.js";
 
-const params = new URLSearchParams(location.search);
-const id = params.get("id");
+const id = new URLSearchParams(location.search).get("id");
 
-const content = document.getElementById("content");
+let data;
+let done = new Set();
 
-let taskData = null;
-let completedTasks = new Set();
+const DAILY_LIMIT = 3;
 
-async function loadTask(){
-
-const snap =
-await getDoc(doc(db,"tasks",id));
-
-if(!snap.exists()){
-content.innerHTML = "<h2>المهمة غير موجودة</h2>";
-return;
+function today(){
+return new Date().toISOString().split("T")[0];
 }
 
-taskData = snap.data();
+function key(){
+return "reward_" + id + "_" + today();
+}
+
+function countKey(){
+return "count_" + today();
+}
+
+async function load(){
+
+const snap = await getDoc(doc(db,"tasks",id));
+data = snap.data();
 
 render();
-
 }
 
 function render(){
 
-let html = "";
+let html = `<div class="card">
+<h2>${data.title}</h2>
+<p>${data.description||""}</p>
+${data.image?`<img src="${data.image}" width="100%">`:""}
+<h3>المهام</h3>`;
 
-html += `
-<div class="card">
-
-<h2>${taskData.title}</h2>
-
-<p>${taskData.description || ""}</p>
-
-${taskData.image ? `<img src="${taskData.image}">` : ""}
-
-<h3>المهام</h3>
-`;
-
-taskData.tasks.forEach((t, index)=>{
-
-const done =
-completedTasks.has(index);
+data.tasks.forEach((t,i)=>{
 
 html += `
 <div class="task">
-
-<div>
 <b>${t.name}</b>
-</div>
-
-<div>
-<button class="open" onclick="openTask('${t.link}', ${index})">
-فتح
-</button>
-</div>
-
+<button class="open" onclick="run('${t.link}',${i},this)">فتح</button>
 </div>
 `;
 
 });
 
-html += `
-<button class="done" onclick="unlockReward()">
-تم تنفيذ كل المهام
-</button>
-
-</div>
-`;
+html += `<button class="done" onclick="unlock()">المكافأة</button></div>`;
 
 content.innerHTML = html;
-
 }
 
-window.openTask = function(link, index){
+window.run = function(link,i,btn){
 
-window.open(link, "_blank");
+if(done.has(i)) return;
 
-completedTasks.add(index);
+btn.disabled=true;
+let t=10;
 
-render();
+btn.innerText=t;
+
+let x=setInterval(()=>{
+
+t--;
+btn.innerText=t;
+
+if(t<=0){
+clearInterval(x);
+window.open(link,"_blank");
+done.add(i);
+btn.innerText="تم";
+}
+
+},1000);
 
 };
 
-window.unlockReward = function(){
+window.unlock = function(){
 
-if(completedTasks.size !== taskData.tasks.length){
-alert("يجب تنفيذ كل المهام أولاً");
+if(done.size !== data.tasks.length){
+alert("كمل كل المهام");
 return;
 }
 
-window.location.href = taskData.rewardLink;
+// daily limit
+let c = parseInt(localStorage.getItem(countKey())||"0");
+
+if(c >= DAILY_LIMIT){
+alert("وصلت الحد اليومي");
+return;
+}
+
+if(localStorage.getItem(key())){
+alert("اخدت المكافأة اليوم");
+return;
+}
+
+localStorage.setItem(key(),"1");
+localStorage.setItem(countKey(),c+1);
+
+location.href=data.rewardLink;
 
 };
 
-loadTask();
+load();
