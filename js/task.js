@@ -6,10 +6,9 @@ const content = document.getElementById("content");
 
 let data;
 let done = new Set();
-
 let captchaPassed = false;
 
-// تحميل المهمة
+// تحميل البيانات
 async function load(){
 
 const snap = await getDoc(doc(db,"tasks",id));
@@ -42,7 +41,9 @@ data.tasks.forEach((t,i)=>{
 html += `
 <div class="task">
 <b>${t.name}</b>
-<button class="open" onclick="run('${t.link}',${i},this)">فتح</button>
+<button class="open" onclick="run('${t.link}',${i},this)">
+فتح
+</button>
 </div>
 `;
 
@@ -62,38 +63,60 @@ content.innerHTML = html;
 
 }
 
-// 🔥 فتح المهمة + عداد 10 ثواني بعد الفتح
+// 🔥 CPA VERIFICATION SYSTEM
 window.run = function(link,i,btn){
 
 if(done.has(i)) return;
 
+// فتح الرابط فورًا
 window.open(link,"_blank");
 
 btn.disabled = true;
 
-let t = 10;
+let time = 10;
+let progress = 0;
 
-btn.innerText = "انتظر " + t;
+// شكل CPA
+btn.innerHTML = `
+<div class="spinner"></div>
+<div>جاري التحقق من النشاط</div>
+<small>${time}s</small>
+
+<div class="bar">
+<div class="fill"></div>
+</div>
+`;
+
+const fill = btn.querySelector(".fill");
+const small = btn.querySelector("small");
 
 let x = setInterval(()=>{
 
-t--;
-btn.innerText = t;
+time--;
+progress += 10;
 
-if(t <= 0){
+small.innerText = time + "s";
+fill.style.width = progress + "%";
+
+if(time <= 0){
 clearInterval(x);
 
 done.add(i);
 
-btn.innerText = "تم";
+// نجاح
+btn.innerHTML = "✅ تم التحقق";
 btn.style.background = "#16a34a";
+
+// 🔊 صوت النجاح
+const audio = new Audio("success.mp3");
+audio.play();
 }
 
 },1000);
 
 };
 
-// 🔥 زر المكافأة
+// 🔐 Unlock reward
 window.unlock = function(){
 
 if(done.size !== data.tasks.length){
@@ -101,7 +124,7 @@ alert("كمل كل المهام");
 return;
 }
 
-// كابتشا
+// CAPTCHA
 if(!captchaPassed){
 
 document.getElementById("captchaBox").innerHTML = `
@@ -123,16 +146,14 @@ goReward();
 
 };
 
-// نجاح الكابتشا
+// CAPTCHA success
 window.onCaptchaSuccess = function(){
 captchaPassed = true;
 unlock();
 };
 
-// المكافأة النهائية
+// reward redirect
 function goReward(){
-
-// بدون أي ليمت نهائيًا
 
 window.location.href = data.rewardLink;
 
