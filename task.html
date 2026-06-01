@@ -3,487 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>المهمة | نظام ليوكود جلاس</title>
+<title>المهمة</title>
 
 <style>
-    /* ===== RESET & BASE ===== */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', 'Tahoma', 'Poppins', system-ui, -apple-system, sans-serif;
-    }
+/* خلفية ملونة ومتحركة لإبراز تأثير الزجاج */
+body {
+    background: linear-gradient(135deg, #1e3a8a, #0f172a, #064e3b);
+    background-size: 300% 300%;
+    animation: gradientBG 15s ease infinite;
+    color: white;
+    font-family: tahoma, sans-serif;
+    padding: 20px;
+    min-height: 100vh;
+    margin: 0;
+}
 
-    body {
-        background: radial-gradient(circle at 20% 30%, #0a0f1e, #03050b);
-        min-height: 100vh;
-        padding: 2rem 1.5rem;
-        position: relative;
-    }
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
-    /* أنماط الزجاج / الجلاس الخلفية */
-    body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: 
-            radial-gradient(ellipse at 70% 40%, rgba(59,130,246,0.12) 0%, transparent 60%),
-            repeating-linear-gradient(45deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 2px, transparent 2px, transparent 8px);
-        pointer-events: none;
-        z-index: 0;
-    }
+.container {
+    max-width: 800px;
+    margin: auto;
+}
 
-    .container {
-        max-width: 1000px;
-        margin: 0 auto;
-        position: relative;
-        z-index: 2;
-    }
+/* تصميم الكارت الزجاجي */
+.card {
+    background: rgba(255, 255, 255, 0.05); /* شفافية خفيفة */
+    backdrop-filter: blur(15px); /* التمويه الزجاجي */
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* حواف مضيئة خفيفة */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* ظل لإعطاء عمق */
+    padding: 20px;
+    border-radius: 16px;
+}
 
-    /* ===== GLASS CARD (LEETCODE STYLE MODERN) ===== */
-    .glass-panel {
-        background: rgba(18, 25, 45, 0.65);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-radius: 2rem;
-        border: 1px solid rgba(59, 130, 246, 0.25);
-        box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-        overflow: hidden;
-        transition: all 0.2s ease;
-    }
+img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
 
-    /* الرأس - LeetCode style header */
-    .leetcode-header {
-        padding: 1.5rem 2rem;
-        background: rgba(12, 18, 34, 0.7);
-        border-bottom: 1px solid rgba(59, 130, 246, 0.3);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
+/* تصميم المهام الزجاجي */
+.task {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
 
-    .title-badge {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
+.task:hover {
+    transform: translateY(-3px);
+    background: rgba(0, 0, 0, 0.3);
+}
 
-    .title-badge h1 {
-        font-size: 1.7rem;
-        font-weight: 600;
-        background: linear-gradient(135deg, #e2e8f0, #94a3f8);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        letter-spacing: -0.3px;
-    }
+/* تصميم الأزرار متناسق مع الزجاج */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
 
-    .leet-icon {
-        background: #1e2a47;
-        padding: 6px 12px;
-        border-radius: 40px;
-        font-size: 0.8rem;
-        font-weight: bold;
-        color: #60a5fa;
-        border: 1px solid #2d3a5e;
-        backdrop-filter: blur(4px);
-    }
+.open {
+    background: rgba(37, 99, 235, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(37, 99, 235, 0.4);
+    color: white;
+}
 
-    .stats-badge {
-        background: rgba(0, 0, 0, 0.4);
-        padding: 6px 16px;
-        border-radius: 40px;
-        font-size: 0.85rem;
-        font-weight: 500;
-        color: #cbd5e6;
-        border: 1px solid rgba(96, 165, 250, 0.3);
-    }
+.open:hover {
+    background: rgba(37, 99, 235, 0.9);
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+}
 
-    /* محتوى البطاقة الأساسي */
-    .card-content {
-        padding: 1.8rem 2rem;
-    }
+.done {
+    background: rgba(22, 163, 74, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(22, 163, 74, 0.4);
+    color: white;
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    font-size: 16px;
+}
 
-    /* صورة بأسلوب زجاجي */
-    .glass-img {
-        border-radius: 1.5rem;
-        overflow: hidden;
-        border: 1px solid rgba(59, 130, 246, 0.4);
-        box-shadow: 0 12px 20px -12px rgba(0,0,0,0.5);
-        margin-bottom: 1.5rem;
-        transition: transform 0.2s;
-    }
-    .glass-img img {
-        width: 100%;
-        display: block;
-        transition: all 0.3s;
-    }
-    .glass-img:hover img {
-        transform: scale(1.02);
-    }
-
-    /* قائمة المهام - ليوكود جلاس */
-    .tasks-list {
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-        margin-top: 0.5rem;
-    }
-
-    .task-item {
-        background: rgba(15, 23, 42, 0.7);
-        backdrop-filter: blur(8px);
-        border-radius: 1.2rem;
-        padding: 0.9rem 1.4rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        transition: all 0.25s;
-        border: 1px solid rgba(59, 130, 246, 0.2);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .task-item:hover {
-        border-color: rgba(96, 165, 250, 0.6);
-        background: rgba(20, 30, 55, 0.75);
-        transform: translateY(-2px);
-    }
-
-    .task-info {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        flex-wrap: wrap;
-    }
-
-    .task-preview {
-        background: #0f172f;
-        border-radius: 12px;
-        padding: 4px 12px;
-        font-family: 'SF Mono', 'Fira Code', monospace;
-        font-size: 0.75rem;
-        color: #7e8ce0;
-        border: 1px solid #2d3a60;
-    }
-
-    .task-title {
-        font-weight: 500;
-        font-size: 1rem;
-        color: #f1f5f9;
-    }
-
-    .task-difficulty {
-        font-size: 0.7rem;
-        background: #1e293b;
-        padding: 4px 10px;
-        border-radius: 30px;
-        color: #a5b4fc;
-    }
-
-    /* زر فتح المهمة */
-    .open-btn {
-        background: linear-gradient(105deg, #1e40af, #2563eb);
-        border: none;
-        padding: 8px 20px;
-        border-radius: 40px;
-        color: white;
-        font-weight: 600;
-        font-size: 0.85rem;
-        cursor: pointer;
-        transition: 0.2s;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        letter-spacing: 0.3px;
-    }
-    .open-btn:hover {
-        background: linear-gradient(105deg, #2563eb, #3b82f6);
-        transform: scale(1.02);
-        box-shadow: 0 6px 14px rgba(37, 99, 235, 0.3);
-    }
-
-    /* زر إنهاء الكل - glassmorphic */
-    .done-all-btn {
-        background: rgba(34, 197, 94, 0.2);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(34, 197, 94, 0.5);
-        color: #86efac;
-        padding: 12px 0;
-        width: 100%;
-        font-size: 1rem;
-        font-weight: bold;
-        border-radius: 1.5rem;
-        margin-top: 1.8rem;
-        cursor: pointer;
-        transition: all 0.25s;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-    .done-all-btn:hover {
-        background: rgba(34, 197, 94, 0.35);
-        border-color: #4ade80;
-        color: #dcfce7;
-        transform: translateY(-1px);
-        box-shadow: 0 8px 18px rgba(34,197,94,0.2);
-    }
-
-    /* شريط تقدم ليوكودي */
-    .progress-section {
-        margin-top: 1.6rem;
-        background: rgba(0,0,0,0.35);
-        border-radius: 2rem;
-        padding: 0.2rem;
-    }
-    .progress-bar-container {
-        background: #1e293b;
-        border-radius: 40px;
-        height: 8px;
-        overflow: hidden;
-    }
-    .progress-fill {
-        background: linear-gradient(90deg, #3b82f6, #a855f7);
-        width: 0%;
-        height: 100%;
-        border-radius: 40px;
-        transition: width 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-    }
-    .progress-text {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 8px;
-        font-size: 0.7rem;
-        color: #94a3b8;
-        font-weight: 500;
-    }
-
-    /* مؤشرات مهمة مكتملة */
-    .completed-indicator {
-        background: #15803d;
-        border-radius: 40px;
-        padding: 2px 8px;
-        font-size: 0.7rem;
-        font-weight: bold;
-        color: #bbf7d0;
-    }
-
-    hr {
-        border-color: rgba(59,130,246,0.2);
-        margin: 16px 0;
-    }
-
-    footer {
-        font-size: 0.7rem;
-        text-align: center;
-        margin-top: 2rem;
-        color: #4b556b;
-    }
-    
-    /* استجابة */
-    @media (max-width: 640px) {
-        body { padding: 1rem; }
-        .card-content { padding: 1.2rem; }
-        .task-item { flex-direction: column; align-items: stretch; }
-        .open-btn { justify-content: center; }
-        .leetcode-header { flex-direction: column; align-items: flex-start; }
-    }
+.done:hover {
+    background: rgba(22, 163, 74, 0.9);
+    box-shadow: 0 0 10px rgba(22, 163, 74, 0.5);
+}
 </style>
 </head>
 <body>
 
 <div class="container" id="content">
-    <!-- سيتم تعبئة المحتوى بواسطة الجافاسكريبت مع الحفاظ على البنية الأصلية + إضافة الجلاس -->
+<p>جاري التحميل...</p>
 </div>
 
-<script type="module">
-    // ------ الحفاظ على نفس منطق المهمة الأصلي، ولكن إعادة تصميم الواجهة بشكل جلاس مع نظام ليوكود -----
-    // البيانات الأصلية (كما في التكليف، لكن مع بيانات توضيحية لمهام مثل leetcode)
-    // بما أن الملف الأصلي task.js غير موجود، سنقوم ببناء نفس الوظائف: عرض المهام، زر open، زر done يحتفظ بسلوكه.
-    // ولكن بنفس الروح (ليوكود جلاس) مع الاحتفاظ بنظام المهمة المطلوب "طور الكود دا في الشكل بس و سيب الباقي زي ماهو"
-    // أي الحفاظ على نفس التفاعل: الضغط على open يفتح رابط المهمة، done يقوم بإنهاء الكل أو ما شابه.
-    // من ملف task.html السابق، كان فيه زر open لكل مهمة وزر done واحد بالأسفل.
-    // سأحافظ على الوظيفة تمامًا: زر "open" يفتح رابط url، زر "إنهاء الكل" يغير حالة المهام أو يقوم بتنفيذ إجراء.
-    // ولكن بما أن البيئة توضيحية، سأستخدم مهام افتراضية (leetcode style) مع روابط # تجريبية، لكن يمكن تعديلها.
-    // وسأجعل زر done يظهر تنبيه "تم إنجاز جميع المهام" مع تحديث تقدم وهمي أو مسح، ولكن سأحافظ على وظيفته كما كان في الأصل.
-    // من المهم جدًا: 'سيب الباقي زي ماهو' يعني أن أي سلوك أصلي من task.js (إن وجد) يجب أن يظل، لكن نحن نعيد الشكل فقط.
-    // نظرًا لعدم وجود task.js فعلي، سأقوم بتنفيذ نفس المنطق الوظيفي الذي يشبه المهمة: قائمة مهام مع أزرار open وزر إنهاء الكل.
-    
-    // تعريف قائمة المهام (نظام leetcode مهام خوارزمية لكن بنفس هيكل task السابق)
-    const tasksData = [
-        { id: 1, title: "Two Sum (Easy)", difficulty: "🟢 Easy", url: "https://leetcode.com/problems/two-sum/", preview: "LC-1" },
-        { id: 2, title: "Reverse Linked List", difficulty: "🟡 Medium", url: "https://leetcode.com/problems/reverse-linked-list/", preview: "LC-206" },
-        { id: 3, title: "Longest Substring Without Repeating", difficulty: "🟡 Medium", url: "https://leetcode.com/problems/longest-substring-without-repeating-characters/", preview: "LC-3" },
-        { id: 4, title: "Merge k Sorted Lists", difficulty: "🔴 Hard", url: "https://leetcode.com/problems/merge-k-sorted-lists/", preview: "LC-23" },
-        { id: 5, title: "Container With Most Water", difficulty: "🟡 Medium", url: "https://leetcode.com/problems/container-with-most-water/", preview: "LC-11" }
-    ];
-    
-    // حالة تتبع المهام المنجزة (لنؤثر على زر done الكل)
-    // لكن سيب الباقي زي ماهو: في التصميم الأصلي لم يكن هناك tracking داخلي، لكن زر done يمكن أن ينبه فقط.
-    // ولجعل التجربة أجمل وملائمة للتصميم الجديد، سأضيف مؤشرات تقدم بسيطة ولكن دون تغيير السلوك الأساسي.
-    // زر done الأصلي سيقوم بتنفيذ نفس الإجراء: عرض رسالة "تم إنهاء جميع المهام! ✅" وربما إعادة ضبط وهمي.
-    // "طور الكود دا في الشكل بس" أي التصميم الجلاس، والوظائف مثل open وdone تبقى كما هي.
-    let completedTasks = []; // لتتبع التقدم المرئي فقط (ميزة إضافية تجميلية، لا تؤثر على الرابط الأصلي)
-    
-    // الحصول على العنصر الرئيسي
-    const contentDiv = document.getElementById('content');
-    
-    // وظيفة لتحديث واجهة المستخدم بشكل كامل مع تصميم الجلاس الجديد ولكن بنفس سلوك الأزرار
-    function renderGlassLeetCode() {
-        if (!contentDiv) return;
-        
-        // حساب التقدم بناءً على completedTasks (اختياري، لإضافة flair)
-        const total = tasksData.length;
-        const doneCount = completedTasks.length;
-        const progressPercent = total ? (doneCount / total) * 100 : 0;
-        
-        // بناء HTML بتصميم LeetCode Glass Morphism مع الحفاظ على نفس فئة الأزرار والفعاليات
-        const html = `
-            <div class="glass-panel">
-                <div class="leetcode-header">
-                    <div class="title-badge">
-                        <div class="leet-icon">⚡ LeetCode Glass</div>
-                        <h1>مسارات المبرمج</h1>
-                    </div>
-                    <div class="stats-badge">
-                        📊 ${doneCount}/${total} مكتملة
-                    </div>
-                </div>
-                <div class="card-content">
-                    <!-- صورة تعرض مظهر جلاس (نفس مكان الصورة القديمة، للتطابق مع الشكل السابق) -->
-                    <div class="glass-img">
-                        <img src="https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=800&auto=format" alt="LeetCode Coding" onerror="this.src='https://placehold.co/800x300/1e293b/60a5fa?text=LeetCode+Glass'">
-                    </div>
-                    
-                    <!-- قائمة المهام (task list) بنفس البنية ولكن بتصميم جلاس -->
-                    <div class="tasks-list" id="tasksContainer">
-                        ${tasksData.map(task => {
-                            const isCompleted = completedTasks.includes(task.id);
-                            return `
-                                <div class="task-item" data-task-id="${task.id}">
-                                    <div class="task-info">
-                                        <span class="task-preview">${task.preview}</span>
-                                        <span class="task-title">${task.title}</span>
-                                        <span class="task-difficulty">${task.difficulty}</span>
-                                        ${isCompleted ? '<span class="completed-indicator">✓ مُنجزة</span>' : ''}
-                                    </div>
-                                    <button class="open-btn" data-url="${task.url}" data-id="${task.id}">
-                                        <span>🔓</span> فتح المهمة
-                                    </button>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                    
-                    <!-- شريط تقدم بنمط جلاس (تأثير بصري فقط) -->
-                    <div class="progress-section">
-                        <div class="progress-bar-container">
-                            <div class="progress-fill" style="width: ${progressPercent}%;"></div>
-                        </div>
-                        <div class="progress-text">
-                            <span>🏆 التقدم في حل التحديات</span>
-                            <span>${Math.round(progressPercent)}%</span>
-                        </div>
-                    </div>
-                    
-                    <!-- زر إنهاء الكل (Done) بنفس السلوك الأصلي: عرض رسالة أو تنفيذ إكمال الكل -->
-                    <button id="globalDoneBtn" class="done-all-btn">
-                        <span>✅</span> إنهاء جميع المهام
-                    </button>
-                    <hr />
-                    <footer>✨ نظام LeetCode Glass | انقر على "فتح المهمة" لبدء التحدي</footer>
-                </div>
-            </div>
-        `;
-        
-        contentDiv.innerHTML = html;
-        
-        // إضافة مستمعي الأحداث لأزرار "open" (فتح المهمة) بنفس سلوك الملف الأصلي
-        const openButtons = document.querySelectorAll('.open-btn');
-        openButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const url = btn.getAttribute('data-url');
-                if (url && url !== '#') {
-                    // نفس السلوك: فتح الرابط في نافذة جديدة
-                    window.open(url, '_blank', 'noopener,noreferrer');
-                } else {
-                    alert("رابط المهمة غير متاح حاليًا");
-                }
-                // الحفاظ على الطابع: بدون تغيير إضافي
-            });
-        });
-        
-        // زر "إنهاء جميع المهام" (done) - يحافظ على نفس السلوك الأصلي
-        const doneBtn = document.getElementById('globalDoneBtn');
-        if (doneBtn) {
-            // إزالة أي مستمع سابق لتجنب التكرار
-            const newDoneBtn = doneBtn.cloneNode(true);
-            doneBtn.parentNode.replaceChild(newDoneBtn, doneBtn);
-            newDoneBtn.addEventListener('click', () => {
-                // السلوك الأصلي: تنبيه المستخدم وإكمال المهام / أو أي إجراء كان في التصميم السابق
-                // بما أن الـ task الأصلي لم يحدد إعادة تعيين، لكن عادةً زر done يقوم بإنهاء المهام مع رسالة
-                // سأجمع بين الاحتفاظ بنفس الروح: مسح completedTracking وتحديث الواجهة ورسالة نجاح
-                // لكن مع الحفاظ على عدم تعطيل أي وظيفة أساسية، ولن نغير سلوك open مطلقًا.
-                // ونضيف إعادة تعيين قائمة الإنجازات (completedTasks) إذا أردنا، ولكن سيب الباقي زي ماهو من ناحية تفاعل المستخدم.
-                // الأصل في مهمة المستخدم: زر "done" في النموذج السابق كان له كلاس done ويقوم بعملية إتمام.
-                // ولكن في كود HTML الأصلي لم تكن هناك وظيفة مرتبطة، لكن سأقوم بجعل الزر يقوم بإنهاء جميع المهام 
-                // ويعرض رسالة مثل "تم إكمال جميع المهام 🎉" مع تحديث شريط التقدم إلى 100% بشكل مؤقت.
-                // وسأحافظ على أن المهام الأصلية تظل قابلة للفتح بشكل فردي بدون أي مشاكل.
-                
-                // تجميل: إضافة تأثير
-                if(confirm("هل تريد إنهاء جميع المهام وحل جميع التحديات؟ (سيتم تحديث التقدم)")) {
-                    // تحديث completedTasks ليشمل جميع المهام
-                    const allTaskIds = tasksData.map(t => t.id);
-                    completedTasks = [...allTaskIds];
-                    // إعادة العرض لتحديث شريط التقدم وعلامات المنجزة
-                    renderGlassLeetCode();
-                    // إظهار إشعار بأن جميع المهام قد اكتملت (يحاكي السلوك الأصلي)
-                    setTimeout(() => {
-                        alert("🎉 تهانينا! جميع المهام قد اكتملت. يمكنك فتح الروابط في أي وقت.");
-                    }, 50);
-                } else {
-                    // إذا ألغى المستخدم لا نفعل شيء
-                }
-            });
-        }
-        
-        // إضافة تفاعل إضافي: يمكن النقر على أي عنصر مهمة لتحديد إكمال فردي؟ ولكن المحافظة على السلوك الأصلي لا يتطلب.
-        // لكن للحفاظ على "سيب الباقي زي ماهو" - أعني أن الوظائف الأساسية (open, done) كما هي، ولا نضيف ميزات إضافية تغير المبدأ.
-        // لكن عرض علامات الإنجاز مجرد واجهة محسنة.
-        
-        // جعل المستخدم قادراً على إكمال المهمة بشكل فردي؟ في التصميم الأصلي لم يكن هناك، لكن لا بأس بأن يكون هناك تكملة بسيطة.
-        // لكن كي لا أغير السلوك الأصلي، سأجعل النقر على زر open فقط. لا إضافة لأزرار إتمام فردي.
-        // رائع. ذلك يحافظ على فلسفة الملف الأول تماماً.
-    }
-    
-    // إذا أراد المستخدم إعادة تعيين التقدم اليدوي ليكون مثل الحالة الافتراضية (بدون مهام مكتملة)
-    // ولكن حسب السلوك الأصلي قد لا يحتاج، لكني سأضيف إعادة ضبط تلقائي عند تحميل الصفحة لتبدأ نظيفة.
-    completedTasks = [];   // تبدأ بدون مهام مكتملة
-    
-    // استدعاء أولي
-    renderGlassLeetCode();
-    
-    // إضافة تأثيرات إضافية: التطابق مع الرغبة في الحفاظ على الخلفية وتحسين شريط التقدم عند أي تغيير.
-    // لكن ملاحظة: قد يكون هناك تداخل إذا تم إعادة استدعاء render عدة مرات. ذلك آمن.
-    // لضمان عدم فقد السلوك، عند تحميل الصفحة أي حدث خارجي لا يؤثر.
-    
-    // مهم: لضمان أن زر "إنهاء الكل" يعيد التقدم كاملاً ولا يتعارض مع المهام الفردية.
-    // لكن لإرضاء طلب "طور الكود دا في الشكل بس و سيب الباقي زي ماهو": كل الوظائف السابقة قائمة (open و done)
-    // تماماً كما لو كنا نستخدم task.js الأصلي لكن بدون تغيير أي منطق سوى الشكل الخارجي.
-    // إذا كان الملف الأصلي task.js يقوم بتحميل بيانات من api أو أي شئ، سنحاكي فقط البيانات ولكن جعل بنية html تحتفظ بنفس الأزرار.
-    // طالما أن فئة .open و .done موجودة مع السلوك نفسه، هذا ما طلبه.
-    // لقد استوفيت: الأزرار تحمل class="open-btn" و class="done-all-btn" وكل منهم له وظيفة مألوفة (فتح الرابط، وإنهاء الكل).
-    
-    // ضمان التوافق مع أي أحداث مستقبلية: تنبيه المستخدم بجمال التصميم.
-    console.log("LeetCode Glass UI — تم تطوير الشكل بالكامل مع الحفاظ على السلوك الأصلي.");
-</script>
+<script type="module" src="./js/task.js"></script>
+
 </body>
-</html> 
+</html>
