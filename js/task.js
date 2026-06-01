@@ -7,23 +7,9 @@ const content = document.getElementById("content");
 let data;
 let done = new Set();
 
-const DAILY_LIMIT = 10;
-
 let captchaPassed = false;
 
-function today(){
-return new Date().toISOString().split("T")[0];
-}
-
-function rewardKey(){
-return "reward_" + id + "_" + today();
-}
-
-function countKey(){
-return "count_" + today();
-}
-
-// تحميل البيانات
+// تحميل المهمة
 async function load(){
 
 const snap = await getDoc(doc(db,"tasks",id));
@@ -65,7 +51,9 @@ html += `
 html += `
 <div id="captchaBox"></div>
 
-<button class="done" onclick="unlock()">تخطي رابط </button>
+<button class="done" onclick="unlock()">
+تخطي الرابط
+</button>
 
 </div>
 `;
@@ -74,36 +62,38 @@ content.innerHTML = html;
 
 }
 
-// 🔥 فتح المهمة + 10 ثواني بعد الفتح
+// 🔥 فتح المهمة + عداد 10 ثواني بعد الفتح
 window.run = function(link,i,btn){
 
 if(done.has(i)) return;
 
 window.open(link,"_blank");
 
-btn.disabled=true;
+btn.disabled = true;
 
-let t=10;
+let t = 10;
 
-btn.innerText="انتظر "+t;
+btn.innerText = "انتظر " + t;
 
-let x=setInterval(()=>{
+let x = setInterval(()=>{
 
 t--;
-btn.innerText=t;
+btn.innerText = t;
 
-if(t<=0){
+if(t <= 0){
 clearInterval(x);
+
 done.add(i);
-btn.innerText="تم";
-btn.style.background="#16a34a";
+
+btn.innerText = "تم";
+btn.style.background = "#16a34a";
 }
 
 },1000);
 
 };
 
-// 🔥 فتح المكافأة
+// 🔥 زر المكافأة
 window.unlock = function(){
 
 if(done.size !== data.tasks.length){
@@ -111,7 +101,7 @@ alert("كمل كل المهام");
 return;
 }
 
-// لو الكابتشا مش محلولة
+// كابتشا
 if(!captchaPassed){
 
 document.getElementById("captchaBox").innerHTML = `
@@ -133,7 +123,7 @@ goReward();
 
 };
 
-// عند نجاح الكابتشا
+// نجاح الكابتشا
 window.onCaptchaSuccess = function(){
 captchaPassed = true;
 unlock();
@@ -142,20 +132,7 @@ unlock();
 // المكافأة النهائية
 function goReward(){
 
-let count = parseInt(localStorage.getItem(countKey())||"0");
-
-if(count >= DAILY_LIMIT){
-alert("وصلت الحد اليومي");
-return;
-}
-
-if(localStorage.getItem(rewardKey())){
-alert("اخدت المكافأة اليوم");
-return;
-}
-
-localStorage.setItem(rewardKey(),"10");
-localStorage.setItem(countKey(),count+1);
+// بدون أي ليمت نهائيًا
 
 window.location.href = data.rewardLink;
 
