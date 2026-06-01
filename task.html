@@ -8,9 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
-    /* نظام المتغيرات (CSS Variables) 
-      ده اللي بيخلينا نغير الألوان بضغطة زرار
-    */
     :root {
         --bg-main: #050505;
         --text-main: #e0f2fe;
@@ -27,7 +24,6 @@
         --bg-glow-2: rgba(0, 150, 255, 0.05);
     }
 
-    /* ألوان الوضع النهاري (Light Mode) */
     body.light-mode {
         --bg-main: #f0f8ff;
         --text-main: #0f172a;
@@ -59,7 +55,6 @@
         transition: background-color 0.5s ease, color 0.5s ease;
     }
 
-    /* حاوية تلم كل المحتوى وتظبطه في النص */
     .container {
         width: 100%;
         max-width: 800px;
@@ -67,7 +62,6 @@
         box-sizing: border-box;
     }
 
-    /* الهيدر اللي شايل العنوان وزرار الإضاءة */
     .top-header {
         display: flex;
         justify-content: space-between;
@@ -88,7 +82,6 @@
         text-align: center;
     }
 
-    /* زرار الإضاءة */
     .theme-toggle {
         background: none;
         border: none;
@@ -96,13 +89,11 @@
         cursor: pointer;
         padding: 5px;
         transition: transform 0.3s;
-        box-shadow: none;
     }
     .theme-toggle:hover {
         transform: rotate(20deg) scale(1.1);
     }
 
-    /* الحاوية الرئيسية (نص التحميل) */
     #content {
         width: 100%;
         font-size: 1.2rem;
@@ -117,7 +108,8 @@
         padding: 25px;
         border-radius: 20px;
         margin-bottom: 20px;
-        text-align: right;
+        /* تم تغيير المحاذاة ليكون العنوان والوصف في المنتصف */
+        text-align: center; 
         counter-reset: task-counter; 
         transition: all 0.4s ease;
     }
@@ -133,8 +125,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        flex-wrap: wrap; /* عشان الأزرار تنزل سطر في الشاشات الصغيرة لو المكان ضيق */
+        flex-wrap: wrap;
         gap: 10px;
+        /* تم إرجاع محاذاة المهام لليمين حتى لا يتشوه شكلها */
+        text-align: right; 
     }
 
     .task:hover {
@@ -162,7 +156,6 @@
         justify-content: center;
         border-radius: 50%;
         box-shadow: 0 0 10px var(--primary-glow);
-        transition: all 0.4s ease;
     }
 
     button {
@@ -203,7 +196,82 @@
         transform: translateY(-2px);
     }
 
-    /* تعديلات مخصوصة لشاشات الموبايل (Responsive Media Query) */
+    /* --- تصميم النافذة المنبثقة (Popup Modal) --- */
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+    }
+    
+    .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        transform: translateY(-30px) scale(0.95);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 30px;
+    }
+
+    .modal-overlay.show .modal-content {
+        transform: translateY(0) scale(1);
+    }
+
+    .modal-content h2 {
+        margin-top: 0;
+        color: var(--btn-open-text);
+        text-shadow: 0 0 10px var(--primary-glow);
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    /* زر المشاهدة */
+    .btn-watch {
+        background: var(--counter-bg);
+        color: var(--counter-text);
+        text-decoration: none;
+        padding: 10px 24px;
+        border-radius: 8px;
+        font-weight: 700;
+        box-shadow: 0 5px 15px var(--primary-glow);
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+    .btn-watch:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px var(--primary-glow);
+    }
+
+    /* زر الإلغاء */
+    .btn-close {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-main);
+        border: 1px solid var(--glass-border);
+    }
+    .btn-close:hover {
+        background: rgba(255, 59, 48, 0.1);
+        border-color: #ff3b30;
+        color: #ff3b30;
+    }
+
     @media (max-width: 600px) {
         .card { padding: 15px; }
         .task { 
@@ -222,6 +290,17 @@
 </head>
 <body>
 
+<div id="tutorialModal" class="modal-overlay">
+    <div class="modal-content card">
+        <h2>طريقة تخطي الرابط 🚀</h2>
+        <p>هل تواجه صعوبة؟ شاهد هذا الفيديو القصير لتعرف كيف تتخطى الرابط بسهولة.</p>
+        <div class="modal-actions">
+            <a href="https://www.youtube.com/watch?v=YOUR_VIDEO_ID" target="_blank" id="watchBtn" class="btn-watch">مشاهدة الفيديو</a>
+            <button id="closeModalBtn" class="btn-close">لا، شكراً</button>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <header class="top-header">
         <button id="themeToggle" class="theme-toggle" title="تغيير الإضاءة">☀️</button>
@@ -235,18 +314,46 @@
 <script type="module" src="./js/task.js"></script>
 
 <script>
+    // --- سكريبت الوضع الليلي والنهاري ---
     const themeToggleBtn = document.getElementById('themeToggle');
     const body = document.body;
 
     themeToggleBtn.addEventListener('click', () => {
         body.classList.toggle('light-mode');
-        
-        // تغيير الأيقونة حسب الوضع
         if (body.classList.contains('light-mode')) {
             themeToggleBtn.textContent = '🌙';
         } else {
             themeToggleBtn.textContent = '☀️';
         }
+    });
+
+    // --- سكريبت النافذة المنبثقة (Popup) ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('tutorialModal');
+        const closeBtn = document.getElementById('closeModalBtn');
+        const watchBtn = document.getElementById('watchBtn');
+
+        // إظهار النافذة بعد نصف ثانية من تحميل الصفحة
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 500);
+
+        // إخفاء النافذة عند الضغط على "لا، شكراً"
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+
+        // إخفاء النافذة عند الضغط على زر المشاهدة (لأن الفيديو هيفتح في نافذة جديدة)
+        watchBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+
+        // إخفاء النافذة لو المستخدم ضغط في أي مكان برا المربع
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
     });
 </script>
 
