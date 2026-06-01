@@ -65,7 +65,7 @@ html += `
 html += `
 <div id="captchaBox"></div>
 
-<button class="done" onclick="unlock()">المكافأة</button>
+<button class="done" onclick="unlock()">تخطي رابط </button>
 
 </div>
 `;
@@ -154,7 +154,7 @@ alert("اخدت المكافأة اليوم");
 return;
 }
 
-localStorage.setItem(rewardKey(),"1");
+localStorage.setItem(rewardKey(),"10");
 localStorage.setItem(countKey(),count+1);
 
 window.location.href = data.rewardLink;
