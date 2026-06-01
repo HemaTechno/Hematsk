@@ -7,7 +7,7 @@ const content = document.getElementById("content");
 let data;
 let done = new Set();
 
-const DAILY_LIMIT = 3;
+const DAILY_LIMIT = 10;
 
 let captchaPassed = false;
 
