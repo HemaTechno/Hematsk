@@ -5,100 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المحاكي السريري الذكي</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f0f4f8; 
-            margin: 0; 
-            padding: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-        }
-        .container { 
-            width: 100%; 
-            max-width: 600px; 
-            background: white; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-            overflow: hidden; 
-        }
-        .header { 
-            background: #0056b3; 
-            color: white; 
-            padding: 15px; 
-            text-align: center; 
-        }
-        .patient-info { 
-            background: #e9ecef; 
-            padding: 10px 15px; 
-            font-size: 14px; 
-            border-bottom: 1px solid #ddd; 
-        }
-        .chat-box { 
-            height: 400px; 
-            overflow-y: auto; 
-            padding: 15px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 10px; 
-            background: #fafafa; 
-        }
-        .message { 
-            max-width: 80%; 
-            padding: 10px 15px; 
-            border-radius: 15px; 
-            line-height: 1.4; 
-        }
-        .user-msg { 
-            align-self: flex-start; 
-            background: #0056b3; 
-            color: white; 
-            border-bottom-right-radius: 0; 
-        }
-        .ai-msg { 
-            align-self: flex-end; 
-            background: #e0e0e0; 
-            color: black; 
-            border-bottom-left-radius: 0; 
-        }
-        .eval-msg { 
-            align-self: center; 
-            background: #ffeb3b; 
-            color: #333; 
-            font-weight: bold; 
-            border-radius: 10px; 
-            text-align: center; 
-            width: 90%; 
-            border: 2px solid #fbc02d;
-        }
-        .input-area { 
-            display: flex; 
-            border-top: 1px solid #ddd; 
-            padding: 10px; 
-            background: white; 
-        }
-        input[type="text"] { 
-            flex: 1; 
-            padding: 10px; 
-            border: 1px solid #ccc; 
-            border-radius: 5px; 
-            outline: none; 
-            font-family: inherit;
-        }
-        button { 
-            background: #0056b3; 
-            color: white; 
-            border: none; 
-            padding: 10px 15px; 
-            margin-right: 10px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            font-family: inherit;
-            font-weight: bold;
-        }
-        button:hover { 
-            background: #004494; 
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f8; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 600px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: #0056b3; color: white; padding: 15px; text-align: center; }
+        .patient-info { background: #e9ecef; padding: 10px 15px; font-size: 14px; border-bottom: 1px solid #ddd; }
+        .chat-box { height: 400px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #fafafa; }
+        .message { max-width: 80%; padding: 10px 15px; border-radius: 15px; line-height: 1.4; }
+        .user-msg { align-self: flex-start; background: #0056b3; color: white; border-bottom-right-radius: 0; }
+        .ai-msg { align-self: flex-end; background: #e0e0e0; color: black; border-bottom-left-radius: 0; }
+        .eval-msg { align-self: center; background: #ffeb3b; color: #333; font-weight: bold; border-radius: 10px; text-align: center; width: 90%; border: 2px solid #fbc02d; }
+        .input-area { display: flex; border-top: 1px solid #ddd; padding: 10px; background: white; }
+        input[type="text"] { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; outline: none; font-family: inherit; }
+        button { background: #0056b3; color: white; border: none; padding: 10px 15px; margin-right: 10px; border-radius: 5px; cursor: pointer; font-family: inherit; font-weight: bold; }
+        button:hover { background: #004494; }
     </style>
 </head>
 <body>
@@ -122,13 +41,13 @@
     </div>
 
     <script>
-        // تم تثبيت المفتاح هنا كما طلبت
+        // حط المفتاح الجديد بتاعك اللي بيبدأ بـ AQ بين علامتين التنصيص هنا
         const apiKey = 'AQ.Ab8RN6IYZdU1uN86UkJsXI9SrB64AW3PGs7AY1hViSo21CSTYw';
         
         let chatHistory = [];
         let isFirstMessage = true;
         
-        // التعليمات اللي هتتبعت في الخلفية مع أول رسالة
+        // التعليمات اللي هتتبعت في الخلفية مع أول رسالة عشان نبرمج شخصية المريض
         const systemInstruction = `
 [تعليمات برمجية صارمة جداً - أنت تعمل في وضعين متتاليين]:
 أولاً: تقمص دور المريض (أحمد 45 سنة، جفاف شديد وهبوط). أجب باختصار ولا تقدم أي معلومات طبية، فقط اشكُ من الأعراض.
@@ -165,8 +84,8 @@
             addMessageToUI('جاري التحليل...', 'ai-msg', loadingId);
 
             try {
-                // استخدام النموذج المعتمد gemini-1.5-flash
-                const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + apiKey, {
+                // استخدمنا هنا gemini-pro الموديل المستقر 100%
+                const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' + apiKey, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -213,4 +132,4 @@
         }
     </script>
 </body>
-</html>
+</html> 
