@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>كيس سيناريو | منصة التدريب التمريضي التفاعلية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1D9E75;
+    --teal-dark: #0F6E56;
+    --teal-light: #E1F5EE;
+    --teal-mid: #5DCAA5;
+    --blue: #1a6fc4;
+    --blue-light: #E6F1FB;
+    --text-dark: #0d1f1a;
+    --text-mid: #3a5a50;
+    --text-light: #6b8f83;
+    --bg: #f7fdfa;
+    --white: #ffffff;
+    --card-shadow: 0 4px 32px rgba(13, 110, 86, 0.08);
+    --card-shadow-hover: 0 12px 48px rgba(13, 110, 86, 0.18);
+    --border: 1px solid rgba(29,158,117,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(247,253,250,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: var(--border);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px;
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.5rem; font-weight: 900;
+    background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--text-mid);
+    font-size: 0.95rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--teal); }
+  .nav-cta {
+    background: var(--teal); color: white;
+    border: none; padding: 0.55rem 1.4rem;
+    border-radius: 50px; font-family: 'Tajawal', sans-serif;
+    font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .nav-cta:hover { background: var(--teal-dark); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    padding-top: 70px;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(93,202,165,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 20% 80%, rgba(29,158,117,0.08) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: linear-gradient(var(--teal) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--teal) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 5%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center; position: relative; z-index: 1;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--teal-light); color: var(--teal-dark);
+    padding: 0.4rem 1rem; border-radius: 50px;
+    font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem;
+    border: 1px solid rgba(29,158,117,0.25);
+  }
+  .hero-badge span { width: 8px; height: 8px; background: var(--teal); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+  .hero h1 {
+    font-family: 'Cairo', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 900; line-height: 1.15;
+    color: var(--text-dark); margin-bottom: 1.2rem;
+  }
+  .hero h1 em { font-style: normal; color: var(--teal); }
+  .hero p {
+    font-size: 1.1rem; color: var(--text-mid);
+    line-height: 1.8; margin-bottom: 2rem; font-weight: 400;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--teal); color: white;
+    border: none; padding: 0.85rem 2rem;
+    border-radius: 50px; font-family: 'Tajawal', sans-serif;
+    font-size: 1rem; font-weight: 700; cursor: pointer;
+    transition: all 0.25s; box-shadow: 0 4px 20px rgba(29,158,117,0.35);
+    text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-primary:hover { background: var(--teal-dark); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(29,158,117,0.45); }
+  .btn-secondary {
+    background: transparent; color: var(--teal);
+    border: 2px solid var(--teal); padding: 0.82rem 2rem;
+    border-radius: 50px; font-family: 'Tajawal', sans-serif;
+    font-size: 1rem; font-weight: 700; cursor: pointer;
+    transition: all 0.25s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-secondary:hover { background: var(--teal-light); }
+
+  /* HERO VISUAL */
+  .hero-visual {
+    position: relative;
+  }
+  .hero-card {
+    background: white; border-radius: 24px;
+    border: var(--border); padding: 2rem;
+    box-shadow: var(--card-shadow);
+    animation: floatCard 4s ease-in-out infinite;
+  }
+  @keyframes floatCard { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .patient-header {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem; border-bottom: var(--border);
+  }
+  .patient-avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-light), var(--teal-mid));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; font-weight: 900; color: var(--teal-dark);
+  }
+  .patient-name { font-weight: 700; font-size: 1.05rem; }
+  .patient-meta { color: var(--text-light); font-size: 0.85rem; margin-top: 0.2rem; }
+  .vitals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .vital-item {
+    background: var(--bg); border-radius: 12px; padding: 0.75rem 1rem;
+    border: var(--border);
+  }
+  .vital-label { font-size: 0.75rem; color: var(--text-light); margin-bottom: 0.2rem; }
+  .vital-value { font-weight: 700; font-size: 1.1rem; color: var(--teal-dark); }
+  .chat-bubble {
+    background: var(--teal-light); border-radius: 16px 16px 4px 16px;
+    padding: 0.85rem 1.1rem; font-size: 0.9rem; color: var(--text-dark); font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+  .chat-bubble.nurse {
+    background: var(--teal); color: white;
+    border-radius: 16px 16px 16px 4px; text-align: right;
+  }
+  .chat-typing {
+    display: flex; gap: 5px; align-items: center; padding: 0.5rem 1rem;
+  }
+  .dot { width: 8px; height: 8px; background: var(--teal-mid); border-radius: 50%; animation: typing 1.2s infinite; }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+  /* STATS */
+  .stats-bar {
+    background: white; border-top: var(--border); border-bottom: var(--border);
+    padding: 2rem 5%;
+  }
+  .stats-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center;
+  }
+  .stat-num {
+    font-family: 'Cairo', sans-serif; font-size: 2.2rem; font-weight: 900;
+    color: var(--teal); line-height: 1;
+  }
+  .stat-label { font-size: 0.9rem; color: var(--text-light); margin-top: 0.3rem; font-weight: 500; }
+
+  /* SECTION COMMON */
+  section { padding: 6rem 5%; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-tag {
+    display: inline-block; background: var(--teal-light); color: var(--teal-dark);
+    padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700;
+    margin-bottom: 1rem; border: 1px solid rgba(29,158,117,0.2);
+  }
+  .section-title {
+    font-family: 'Cairo', sans-serif; font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 900; color: var(--text-dark); margin-bottom: 0.8rem; line-height: 1.2;
+  }
+  .section-sub { font-size: 1.05rem; color: var(--text-mid); line-height: 1.7; max-width: 600px; }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 3.5rem;
+  }
+  .feature-card {
+    background: white; border-radius: 20px; padding: 2rem;
+    border: var(--border); transition: all 0.3s;
+    box-shadow: var(--card-shadow);
+  }
+  .feature-card:hover { transform: translateY(-6px); box-shadow: var(--card-shadow-hover); }
+  .feature-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: var(--teal-light); display: flex; align-items: center;
+    justify-content: center; font-size: 1.6rem; margin-bottom: 1.2rem;
+  }
+  .feature-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.6rem; color: var(--text-dark); }
+  .feature-card p { font-size: 0.92rem; color: var(--text-light); line-height: 1.7; }
+
+  /* AI DEMO */
+  .ai-section { background: white; }
+  .ai-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .simulator {
+    background: #0d1f1a; border-radius: 24px; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(13,31,26,0.4);
+  }
+  .sim-header {
+    background: #0f2820; padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .sim-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .sim-title { color: rgba(255,255,255,0.6); font-size: 0.85rem; font-weight: 500; margin-right: auto; }
+  .sim-body { padding: 1.5rem; min-height: 380px; display: flex; flex-direction: column; }
+  .msg { margin-bottom: 1rem; max-width: 85%; }
+  .msg.patient { }
+  .msg.nurse { margin-right: auto; margin-left: 0; text-align: right; align-self: flex-end; }
+  .msg-bubble {
+    padding: 0.85rem 1.1rem; border-radius: 16px; font-size: 0.88rem; line-height: 1.6;
+  }
+  .msg.patient .msg-bubble { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); border-radius: 4px 16px 16px 16px; }
+  .msg.nurse .msg-bubble { background: var(--teal); color: white; border-radius: 16px 4px 16px 16px; }
+  .msg-label { font-size: 0.72rem; color: rgba(255,255,255,0.3); margin-bottom: 0.3rem; }
+  .msg.nurse .msg-label { text-align: left; }
+  .sim-input-area {
+    margin-top: auto; background: rgba(255,255,255,0.05);
+    border-radius: 12px; padding: 0.85rem 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  #sim-input {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: white; font-family: 'Tajawal', sans-serif; font-size: 0.9rem;
+    text-align: right;
+  }
+  #sim-input::placeholder { color: rgba(255,255,255,0.3); }
+  #sim-send {
+    background: var(--teal); color: white; border: none;
+    width: 36px; height: 36px; border-radius: 50%;
+    cursor: pointer; font-size: 1rem; transition: background 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #sim-send:hover { background: var(--teal-dark); }
+  #sim-send:disabled { background: #2a4a3e; cursor: not-allowed; }
+  .typing-ind {
+    display: none; align-items: center; gap: 6px; margin-bottom: 1rem;
+    color: rgba(255,255,255,0.4); font-size: 0.8rem;
+  }
+  .typing-ind.active { display: flex; }
+
+  /* STEPS */
+  .steps-section { background: var(--teal-dark); color: white; }
+  .steps-section .section-title { color: white; }
+  .steps-section .section-sub { color: rgba(255,255,255,0.7); }
+  .steps-section .section-tag { background: rgba(255,255,255,0.15); color: white; border-color: rgba(255,255,255,0.2); }
+  .steps-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem; margin-top: 3.5rem; position: relative;
+  }
+  .steps-grid::before {
+    content: '';
+    position: absolute; top: 36px; right: 12.5%; left: 12.5%;
+    height: 2px; background: rgba(255,255,255,0.2);
+    z-index: 0;
+  }
+  .step-card { text-align: center; position: relative; z-index: 1; }
+  .step-num {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cairo', sans-serif; font-size: 1.8rem; font-weight: 900;
+    color: white; margin: 0 auto 1.2rem; transition: all 0.3s;
+  }
+  .step-card:hover .step-num { background: var(--teal-mid); border-color: var(--teal-mid); transform: scale(1.1); }
+  .step-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .step-card p { font-size: 0.88rem; color: rgba(255,255,255,0.65); line-height: 1.6; }
+
+  /* CATEGORIES */
+  .cats-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 3.5rem;
+  }
+  .cat-card {
+    border-radius: 20px; overflow: hidden; position: relative;
+    height: 220px; cursor: pointer; transition: transform 0.3s;
+  }
+  .cat-card:hover { transform: scale(1.02); }
+  .cat-bg {
+    position: absolute; inset: 0;
+    display: flex; align-items: flex-end; padding: 1.5rem;
+  }
+  .cat-card:nth-child(1) .cat-bg { background: linear-gradient(135deg, #0F6E56 0%, #1D9E75 100%); }
+  .cat-card:nth-child(2) .cat-bg { background: linear-gradient(135deg, #185FA5 0%, #378ADD 100%); }
+  .cat-card:nth-child(3) .cat-bg { background: linear-gradient(135deg, #3C3489 0%, #7F77DD 100%); }
+  .cat-icon { position: absolute; top: 1.5rem; left: 1.5rem; font-size: 3rem; opacity: 0.25; }
+  .cat-content { position: relative; }
+  .cat-content h3 { color: white; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.3rem; }
+  .cat-content p { color: rgba(255,255,255,0.7); font-size: 0.85rem; }
+  .cat-arrow {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    color: rgba(255,255,255,0.5); font-size: 1.3rem;
+  }
+
+  /* IMPACT */
+  .impact-section { background: var(--bg); }
+  .impact-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+  .impact-stat-big {
+    font-family: 'Cairo', sans-serif; font-size: 6rem; font-weight: 900;
+    color: var(--teal); line-height: 1; margin-bottom: 0.5rem;
+  }
+  .impact-stat-label { font-size: 1.2rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.5rem; }
+  .impact-stat-sub { font-size: 0.95rem; color: var(--text-mid); line-height: 1.6; }
+  .bars-container { display: flex; flex-direction: column; gap: 1.25rem; }
+  .bar-item { }
+  .bar-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+  .bar-label { font-size: 0.9rem; font-weight: 600; color: var(--text-dark); }
+  .bar-pct { font-size: 0.9rem; font-weight: 700; color: var(--teal); }
+  .bar-track { height: 10px; background: var(--teal-light); border-radius: 50px; overflow: hidden; }
+  .bar-fill {
+    height: 100%; border-radius: 50px;
+    background: linear-gradient(90deg, var(--teal-mid), var(--teal-dark));
+    width: 0; transition: width 1.5s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  /* VALUE */
+  .value-section { background: white; }
+  .value-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3.5rem;
+  }
+  .value-card {
+    border-radius: 20px; padding: 2.5rem;
+    border: 2px solid var(--teal-light);
+  }
+  .value-card:first-child { border-color: rgba(29,158,117,0.3); background: var(--teal-light); }
+  .value-card:last-child { border-color: rgba(55,138,221,0.2); background: var(--blue-light); }
+  .value-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .value-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.2rem; color: var(--text-dark); }
+  .value-list { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .value-list li {
+    display: flex; align-items: flex-start; gap: 0.6rem;
+    font-size: 0.92rem; color: var(--text-mid); line-height: 1.5;
+  }
+  .value-list li::before { content: '✓'; color: var(--teal); font-weight: 900; margin-top: 0.05rem; flex-shrink: 0; }
+
+  /* CTA */
+  .cta-section {
+    background: linear-gradient(135deg, var(--teal-dark) 0%, #085041 100%);
+    text-align: center; padding: 7rem 5%;
+  }
+  .cta-section h2 {
+    font-family: 'Cairo', sans-serif; font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900; color: white; margin-bottom: 1rem;
+  }
+  .cta-section p { color: rgba(255,255,255,0.7); font-size: 1.1rem; margin-bottom: 2.5rem; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: white; color: var(--teal-dark);
+    padding: 1rem 2.5rem; border-radius: 50px;
+    font-family: 'Tajawal', sans-serif; font-size: 1.05rem; font-weight: 800;
+    text-decoration: none; transition: all 0.25s;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  }
+  .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(0,0,0,0.3); }
+
+  /* FOOTER */
+  footer {
+    background: #0d1f1a; color: rgba(255,255,255,0.5);
+    padding: 2.5rem 5%; text-align: center;
+    font-size: 0.88rem;
+  }
+  footer strong { color: var(--teal-mid); }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  .fade-up:nth-child(2) { transition-delay: 0.1s; }
+  .fade-up:nth-child(3) { transition-delay: 0.2s; }
+  .fade-up:nth-child(4) { transition-delay: 0.3s; }
+
+  @media (max-width: 900px) {
+    .hero-inner, .ai-inner, .impact-inner { grid-template-columns: 1fr; }
+    .features-grid, .steps-grid, .cats-grid, .value-grid { grid-template-columns: 1fr 1fr; }
+    .stats-inner { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .steps-grid::before { display: none; }
+  }
+  @media (max-width: 600px) {
+    .features-grid, .steps-grid, .cats-grid, .value-grid, .stats-inner { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">🩺 كيس سيناريو</div>
+  <ul class="nav-links">
+    <li><a href="#features">المميزات</a></li>
+    <li><a href="#demo">جرب المحاكاة</a></li>
+    <li><a href="#categories">التخصصات</a></li>
+    <li><a href="#impact">التأثير</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">ابدأ مجاناً</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge"><span></span> منصة مدعومة بالذكاء الاصطناعي</div>
+      <h1>سد الفجوة بين <em>النظرية</em> والتطبيق السريري</h1>
+      <p>منصة محاكاة تفاعلية لطلاب التمريض — تدرّب على حالات مرضية واقعية، وطوّر مهارات التواصل السريري في بيئة آمنة خالية من المخاطر.</p>
+      <div class="hero-btns">
+        <a href="#demo" class="btn-primary">جرّب الآن مجاناً ←</a>
+        <a href="#features" class="btn-secondary">اعرف أكثر</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="patient-header">
+          <div class="patient-avatar">أ.م</div>
+          <div>
+            <div class="patient-name">أحمد محمد، 58 سنة</div>
+            <div class="patient-meta">🏥 غرفة 204 — طوارئ القلب</div>
+          </div>
+        </div>
+        <div class="vitals-grid">
+          <div class="vital-item">
+            <div class="vital-label">ضغط الدم</div>
+            <div class="vital-value">160/95</div>
+          </div>
+          <div class="vital-item">
+            <div class="vital-label">معدل القلب</div>
+            <div class="vital-value">92 bpm</div>
+          </div>
+          <div class="vital-item">
+            <div class="vital-label">تشبع الأكسجين</div>
+            <div class="vital-value">96%</div>
+          </div>
+          <div class="vital-item">
+            <div class="vital-label">الحرارة</div>
+            <div class="vital-value">37.2°</div>
+          </div>
+        </div>
+        <div class="chat-bubble">أنا حاسس بضيق في الصدر من الصبح يا نرس... خايف</div>
+        <div class="chat-bubble nurse">هاخد منك التاريخ المرضي دلوقتي. هل عندك أمراض قلب سابقة؟</div>
+        <div class="chat-typing">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div><div class="stat-num">+500</div><div class="stat-label">سيناريو سريري</div></div>
+    <div><div class="stat-num">90%</div><div class="stat-label">زيادة في الثقة السريرية</div></div>
+    <div><div class="stat-num">3</div><div class="stat-label">تخصصات طبية</div></div>
+    <div><div class="stat-num">24/7</div><div class="stat-label">متاح في أي وقت</div></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-inner">
+    <div class="section-tag">المميزات الأساسية</div>
+    <h2 class="section-title">كل اللي تحتاجه في منصة واحدة</h2>
+    <p class="section-sub">صُممت كل ميزة بعناية لتحاكي بيئة المستشفى الحقيقية وتسرّع نمو مهاراتك السريرية</p>
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🏥</div>
+        <h3>سيناريوهات واقعية</h3>
+        <p>مكتبة ضخمة من الحالات السريرية المتنوعة المصممة على بروتوكولات الرعاية الصحية المعتمدة عالمياً</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🤖</div>
+        <h3>مريض افتراضي بالذكاء الاصطناعي</h3>
+        <p>شخصيات مرضى تتفاعل معك بشكل طبيعي، تجيب على أسئلتك وتستجيب لنبرة صوتك ومشاعرك</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">📊</div>
+        <h3>تقييم فوري ومفصّل</h3>
+        <p>تقارير دقيقة فور إنهاء الجلسة تحلل أداءك التشخيصي وجودة تواصلك مع المريض</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">💬</div>
+        <h3>تدريب مهارات التواصل</h3>
+        <p>تعلم كيف تبلّغ أخباراً صعبة، تطمئن مريضاً قلقاً، وتشرح إجراءات طبية بلغة بسيطة</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🔁</div>
+        <h3>تكرار بلا حدود</h3>
+        <p>كرّر أي سيناريو صعب حتى تتقنه بالكامل — الخطأ هنا درس، وليس خطر على مريض حقيقي</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">📱</div>
+        <h3>وصول من أي جهاز</h3>
+        <p>تدرّب في أي وقت ومن أي مكان — الموبايل، التابلت، أو الكمبيوتر — 24 ساعة في اليوم</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI DEMO -->
+<section id="demo" class="ai-section">
+  <div class="ai-inner section-inner">
+    <div>
+      <div class="section-tag">المحاكاة التفاعلية</div>
+      <h2 class="section-title">تحدّث مع مريضك الافتراضي</h2>
+      <p class="section-sub">اكتب ما ستقوله للمريض وشوف كيف يرد — الذكاء الاصطناعي يحاكي ردود فعل مريض حقيقي بما فيها المشاعر والمخاوف</p>
+      <br><br>
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        <div style="display:flex;align-items:center;gap:0.75rem;color:var(--text-mid);font-size:0.9rem;">
+          <span style="width:32px;height:32px;background:var(--teal-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--teal);">1</span>
+          <span>اقرأ المعلومات الطبية للمريض في الشاشة</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.75rem;color:var(--text-mid);font-size:0.9rem;">
+          <span style="width:32px;height:32px;background:var(--teal-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--teal);">2</span>
+          <span>اكتب ما ستقوله للمريض كأنك في المستشفى</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.75rem;color:var(--text-mid);font-size:0.9rem;">
+          <span style="width:32px;height:32px;background:var(--teal-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--teal);">3</span>
+          <span>استلم التغذية الراجعة الفورية من الذكاء الاصطناعي</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="simulator">
+        <div class="sim-header">
+          <div class="sim-dot" style="background:#ff5f57"></div>
+          <div class="sim-dot" style="background:#febc2e"></div>
+          <div class="sim-dot" style="background:#28c840"></div>
+          <div class="sim-title">🏥 محاكاة: أحمد محمد — طوارئ القلب</div>
+        </div>
+        <div class="sim-body">
+          <div id="chat-messages">
+            <div class="msg patient">
+              <div class="msg-label">🧑‍⚕️ المريض أحمد</div>
+              <div class="msg-bubble">صباح الخير يا دكتور... أنا عندي ضيق في الصدر من الساعة 6 الصبح، وحاسس بتعب شديد. خايف جداً على نفسي.</div>
+            </div>
+          </div>
+          <div class="typing-ind" id="typing">
+            <div class="dot" style="background:var(--teal-mid)"></div>
+            <div class="dot" style="background:var(--teal-mid)"></div>
+            <div class="dot" style="background:var(--teal-mid)"></div>
+            <span style="color:rgba(255,255,255,0.4);font-size:0.78rem;">أحمد يكتب...</span>
+          </div>
+          <div class="sim-input-area">
+            <input type="text" id="sim-input" placeholder="اكتب ردّك على المريض هنا..." />
+            <button id="sim-send" onclick="sendMessage()">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="steps-section">
+  <div class="section-inner">
+    <div style="text-align:center;margin-bottom:0">
+      <div class="section-tag">رحلة التدريب</div>
+      <h2 class="section-title">4 خطوات لتتقن السريريات</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card fade-up">
+        <div class="step-num">١</div>
+        <h3>اختيار الحالة</h3>
+        <p>اختار من مكتبة السيناريوهات ما يناسب مستواك الأكاديمي وتخصصك</p>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">٢</div>
+        <h3>تقييم المريض</h3>
+        <p>اقرأ العلامات الحيوية، اجمع المعلومات، ووجّه الأسئلة الدقيقة للمريض الافتراضي</p>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">٣</div>
+        <h3>اتخاذ القرار</h3>
+        <p>اختار مسار العلاج المناسب وتواصل مع المريض بلغة واضحة ومطمئنة</p>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">٤</div>
+        <h3>استلام التقرير</h3>
+        <p>احصل على تغذية راجعة فورية تقيّم دقة تشخيصك وجودة تواصلك</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="section-inner">
+    <div class="section-tag">التخصصات</div>
+    <h2 class="section-title">تغطية شاملة لمجالات التمريض</h2>
+    <p class="section-sub">سيناريوهات متخصصة في أكثر المجالات السريرية أهمية وتحدياً لطلاب التمريض</p>
+    <div class="cats-grid">
+      <div class="cat-card">
+        <div class="cat-bg">
+          <div class="cat-icon">🫀</div>
+          <div class="cat-arrow">↗</div>
+          <div class="cat-content">
+            <h3>الطوارئ والعناية المركزة</h3>
+            <p>التعامل السريع مع الحالات الحرجة وإدارة الصدمات تحت ضغط الوقت</p>
+          </div>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-bg">
+          <div class="cat-icon">👶</div>
+          <div class="cat-arrow">↗</div>
+          <div class="cat-content">
+            <h3>تمريض الأطفال والأمومة</h3>
+            <p>مهارات التواصل اللطيف والفحص الدقيق مع الأطفال وذويهم</p>
+          </div>
+        </div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-bg">
+          <div class="cat-icon">🧠</div>
+          <div class="cat-arrow">↗</div>
+          <div class="cat-content">
+            <h3>الصحة النفسية والعقلية</h3>
+            <p>احترافية تقديم الدعم النفسي وإدارة الحالات المضطربة بهدوء واحترافية</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section id="impact" class="impact-section">
+  <div class="impact-inner section-inner">
+    <div>
+      <div class="section-tag">الأثر المتوقع</div>
+      <h2 class="section-title">أرقام تتكلم بنفسها</h2>
+      <br>
+      <div class="impact-stat-big">90%</div>
+      <div class="impact-stat-label">زيادة ملحوظة في الثقة السريرية</div>
+      <p class="impact-stat-sub">الطلاب الذين استخدموا المحاكاة التفاعلية أبدوا ثقة أعلى بكثير في أول يوم عمل سريري، مع انخفاض ملحوظ في الأخطاء الطبية.</p>
+    </div>
+    <div>
+      <div class="bars-container" id="bars">
+        <div class="bar-item">
+          <div class="bar-info"><span class="bar-label">الاستيعاب والفهم السريري</span><span class="bar-pct">95%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="95"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-info"><span class="bar-label">الثقة في اتخاذ القرارات</span><span class="bar-pct">92%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="92"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-info"><span class="bar-label">مهارات التواصل الفعال</span><span class="bar-pct">88%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="88"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-info"><span class="bar-label">إدارة التوتر وضغط العمل</span><span class="bar-pct">85%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="85"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE -->
+<section class="value-section">
+  <div class="section-inner">
+    <div class="section-tag">القيمة المضافة</div>
+    <h2 class="section-title">لمين كيس سيناريو؟</h2>
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="value-icon">🎓</div>
+        <h3>لطلاب التمريض</h3>
+        <ul class="value-list">
+          <li>تعلّم في أي وقت ومن أي جهاز</li>
+          <li>كرّر السيناريوهات الصعبة حتى إتقان المهارة</li>
+          <li>اكسر حاجز الخوف والتوتر من المرضى</li>
+          <li>صقل مهارات التواصل الذكي والتعاطف المهني</li>
+        </ul>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🏫</div>
+        <h3>للمؤسسات الأكاديمية</h3>
+        <ul class="value-list">
+          <li>تقليل التكاليف المادية للمعامل السريرية</li>
+          <li>توحيد معايير التدريب لجميع الطلاب</li>
+          <li>لوحة تحكم إحصائية لمتابعة كل طالب</li>
+          <li>مواكبة التطور التكنولوجي في التعليم الطبي</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>ابنِ جيل ممرضين مؤهلين بامتياز</h2>
+  <p>انضم لمنصة كيس سيناريو وابدأ رحلتك نحو التميز السريري اليوم</p>
+  <a href="#demo" class="cta-btn">ابدأ المحاكاة مجاناً ←</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>صُنع بـ ❤️ من أجل مستقبل التمريض العربي | <strong>كيس سيناريو</strong> © 2025</p>
+  <p style="margin-top:0.5rem;font-size:0.8rem;">منصة محاكاة تفاعلية لتدريب طلاب التمريض وتعزيز مهارات التواصل السريري</p>
+</footer>
+
+<script>
+// ============================================================
+//  🔑 حط الـ API KEY بتاع Claude هنا
+//  روح على: https://console.anthropic.com/settings/keys
+//  اضغط "Create Key" وانسخه هنا بدل النص ده
+// ============================================================
+const CLAUDE_API_KEY = 'sk-ant-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+// ============================================================
+
+// Intersection Observer for animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      if (e.target.id === 'bars') animateBars();
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.fade-up, #bars').forEach(el => observer.observe(el));
+
+function animateBars() {
+  document.querySelectorAll('.bar-fill').forEach(bar => {
+    setTimeout(() => { bar.style.width = bar.dataset.w + '%'; }, 200);
+  });
+}
+
+// AI Chat Simulation
+const SYSTEM_PROMPT = `أنت تلعب دور مريض اسمه أحمد محمد، عمره 58 سنة، يعاني من ضيق في الصدر وخايف جداً.
+المستخدم هو طالب تمريض يتدرب على مهارات التواصل السريري.
+استجب بشكل طبيعي كمريض حقيقي: عبّر عن مشاعرك ومخاوفك، أجب على أسئلة الممرض، واكسب ثقته تدريجياً إذا كان لطيفاً ومهنياً.
+ردودك يجب أن تكون باللغة العربية العامية المصرية، قصيرة ومعبّرة (2-3 جمل فقط).
+المعلومات الطبية للمريض: ضغط 160/95، نبض 92، أكسجين 96%، حرارة 37.2، يشتكي من ضيق صدر من الصبح.`;
+
+let chatHistory = [
+  { role: 'user',      content: 'ابدأ المحاكاة' },
+  { role: 'assistant', content: 'صباح الخير يا دكتور... أنا عندي ضيق في الصدر من الساعة 6 الصبح، وحاسس بتعب شديد. خايف جداً على نفسي.' }
+];
+
+async function sendMessage() {
+  const input = document.getElementById('sim-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  if (!CLAUDE_API_KEY || CLAUDE_API_KEY.includes('XXXXX')) {
+    alert('⚠️ حط الـ API KEY بتاع Claude في الكود أولاً!\nافتح الملف وابحث عن: CLAUDE_API_KEY');
+    return;
+  }
+
+  const sendBtn = document.getElementById('sim-send');
+  sendBtn.disabled = true;
+  input.value = '';
+
+  appendMessage('nurse', 'أنت (الممرض)', text);
+  chatHistory.push({ role: 'user', content: text });
+
+  document.getElementById('typing').classList.add('active');
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': CLAUDE_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 300,
+        system: SYSTEM_PROMPT,
+        messages: chatHistory
+      })
+    });
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
+    const reply = data.content?.[0]?.text || 'معلش... مش قادر أرد دلوقتي.';
+    chatHistory.push({ role: 'assistant', content: reply });
+    document.getElementById('typing').classList.remove('active');
+    appendMessage('patient', '🧑‍⚕️ المريض أحمد', reply);
+  } catch (err) {
+    document.getElementById('typing').classList.remove('active');
+    appendMessage('patient', '⚠️ خطأ', 'في مشكلة في الاتصال: ' + err.message);
+  }
+
+  sendBtn.disabled = false;
+  input.focus();
+}
+
+function appendMessage(type, label, text) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${type}`;
+  div.innerHTML = `<div class="msg-label">${label}</div><div class="msg-bubble">${text}</div>`;
+  container.appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+document.getElementById('sim-input').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') sendMessage();
+});
+
+// Smooth scroll for nav
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
