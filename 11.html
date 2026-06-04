@@ -427,7 +427,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">🩺 كيس سيناريو</div>
   <ul class="nav-links">
@@ -439,7 +438,6 @@
   <button class="nav-cta" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">ابدأ مجاناً</button>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
@@ -490,7 +488,6 @@
   </div>
 </section>
 
-<!-- STATS -->
 <div class="stats-bar">
   <div class="stats-inner">
     <div><div class="stat-num">+500</div><div class="stat-label">سيناريو سريري</div></div>
@@ -500,7 +497,6 @@
   </div>
 </div>
 
-<!-- FEATURES -->
 <section id="features">
   <div class="section-inner">
     <div class="section-tag">المميزات الأساسية</div>
@@ -541,7 +537,6 @@
   </div>
 </section>
 
-<!-- AI DEMO -->
 <section id="demo" class="ai-section">
   <div class="ai-inner section-inner">
     <div>
@@ -595,7 +590,6 @@
   </div>
 </section>
 
-<!-- STEPS -->
 <section class="steps-section">
   <div class="section-inner">
     <div style="text-align:center;margin-bottom:0">
@@ -627,7 +621,6 @@
   </div>
 </section>
 
-<!-- CATEGORIES -->
 <section id="categories">
   <div class="section-inner">
     <div class="section-tag">التخصصات</div>
@@ -668,7 +661,6 @@
   </div>
 </section>
 
-<!-- IMPACT -->
 <section id="impact" class="impact-section">
   <div class="impact-inner section-inner">
     <div>
@@ -702,7 +694,6 @@
   </div>
 </section>
 
-<!-- VALUE -->
 <section class="value-section">
   <div class="section-inner">
     <div class="section-tag">القيمة المضافة</div>
@@ -732,14 +723,12 @@
   </div>
 </section>
 
-<!-- CTA -->
 <section class="cta-section">
   <h2>ابنِ جيل ممرضين مؤهلين بامتياز</h2>
   <p>انضم لمنصة كيس سيناريو وابدأ رحلتك نحو التميز السريري اليوم</p>
   <a href="#demo" class="cta-btn">ابدأ المحاكاة مجاناً ←</a>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <p>صُنع بـ ❤️ من أجل مستقبل التمريض العربي | <strong>كيس سيناريو</strong> © 2025</p>
   <p style="margin-top:0.5rem;font-size:0.8rem;">منصة محاكاة تفاعلية لتدريب طلاب التمريض وتعزيز مهارات التواصل السريري</p>
@@ -747,11 +736,14 @@
 
 <script>
 // ============================================================
-//  🔑 حط الـ API KEY بتاع Claude هنا
-//  روح على: https://console.anthropic.com/settings/keys
-//  اضغط "Create Key" وانسخه هنا بدل النص ده
+// تعديل: جلب مفتاح الـ API من ملف البيئة .env
+// ملاحظة هامة: يجب تشغيل المشروع باستخدام Vite لكي يعمل هذا السطر
+// أضف المتغير التالي في ملف .env الخاص بك:
+// VITE_CLAUDE_API_KEY=your_api_key_here
 // ============================================================
-const CLAUDE_API_KEY = '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';
+const CLAUDE_API_KEY = import.meta.env ? import.meta.env.VITE_CLAUDE_API_KEY : '';
+// إذا كنت تستخدم Webpack أو بيئة Node بدلاً من Vite، استخدم:
+// const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY;
 // ============================================================
 
 // Intersection Observer for animations
@@ -789,8 +781,8 @@ async function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
 
-  if (!CLAUDE_API_KEY || CLAUDE_API_KEY.includes('XXXXX')) {
-    alert('⚠️ حط الـ API KEY بتاع Claude في الكود أولاً!\nافتح الملف وابحث عن: CLAUDE_API_KEY');
+  if (!CLAUDE_API_KEY) {
+    alert('⚠️ لم يتم العثور على مفتاح الـ API! تأكد من إضافة المتغير VITE_CLAUDE_API_KEY في ملف .env وتشغيل المشروع باستخدام أداة بناء مثل Vite.');
     return;
   }
 
