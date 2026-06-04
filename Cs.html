@@ -2,226 +2,146 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Nursing AI Simulation</title>
 
 <style>
 body{
-font-family:Tahoma,sans-serif;
+font-family:Arial;
 background:#f4f7fb;
-margin:0;
-padding:30px;
-max-width:1000px;
+max-width:900px;
 margin:auto;
+padding:20px;
 }
 
 .card{
-background:#fff;
-padding:20px;
-border-radius:15px;
-box-shadow:0 0 15px rgba(0,0,0,.08);
-margin-bottom:20px;
+background:white;
+padding:15px;
+border-radius:12px;
+margin-bottom:15px;
+box-shadow:0 0 10px rgba(0,0,0,.1);
 }
 
 button{
+padding:10px 15px;
 background:#0d6efd;
-color:#fff;
+color:white;
 border:none;
-padding:12px 18px;
-border-radius:10px;
+border-radius:8px;
 cursor:pointer;
-}
-
-button:hover{
-opacity:.9;
+margin:5px;
 }
 
 #chat{
-height:450px;
+height:400px;
 overflow:auto;
 border:1px solid #ddd;
-padding:15px;
-border-radius:10px;
+padding:10px;
 background:#fafafa;
-margin-top:20px;
-}
-
-.patient{
-background:#ffe5e5;
-padding:10px;
 border-radius:10px;
-margin:10px 0;
 }
 
-.student{
-background:#dff1ff;
+.user{background:#dbeafe;padding:8px;margin:5px;border-radius:8px;}
+.ai{background:#fee2e2;padding:8px;margin:5px;border-radius:8px;}
+
+input{
+width:70%;
 padding:10px;
-border-radius:10px;
-margin:10px 0;
-}
-
-textarea{
-width:100%;
-height:80px;
-padding:10px;
-margin-top:10px;
-}
-
-.hidden{
-display:none;
 }
 </style>
 </head>
+
 <body>
 
 <div class="card">
+<h2>🏥 Nursing AI Simulation</h2>
 
-<h1>🏥 Nursing AI Simulation</h1>
-
-<p>أدخل مفتاح OpenAI API للتجربة:</p>
-
-<input
-id="apiKey"
-type="password"
-placeholder="sk-..."
-style="width:100%;padding:10px;"
->
+<input id="apiKey" type="password" placeholder="ضع OpenAI API Key هنا">
 
 <br><br>
 
-<button onclick="claimCase()">
-📋 استلام الحالة
-</button>
-
+<button onclick="claimCase()">📋 استلام الحالة</button>
+<button onclick="finish()">🏁 إنهاء وتقييم</button>
 </div>
 
-<div id="caseBox" class="card hidden"></div>
+<div class="card" id="caseBox" style="display:none;"></div>
 
-<div id="chatBox" class="card hidden">
-
-<h3>المحادثة</h3>
+<div class="card" id="chatBox" style="display:none;">
 
 <div id="chat"></div>
 
-<textarea
-id="message"
-placeholder="اكتب سؤالك للمريض..."
-></textarea>
-
 <br>
 
-<button onclick="sendMessage()">
-إرسال
-</button>
-
-<button onclick="finishCase()">
-✅ إنهاء المقابلة
-</button>
+<input id="input" placeholder="اكتب سؤالك للمريض">
+<button onclick="send()">إرسال</button>
 
 </div>
 
-<div id="resultBox" class="card hidden"></div>
+<div class="card" id="result"></div>
 
 <script>
 
 let messages = [];
 
-let patientSystemPrompt = `
-You are a virtual patient in a nursing OSCE simulation.
+const systemPrompt = `
+You are a virtual patient in nursing OSCE.
 
-Patient Name: Ahmed Mohamed
+Patient:
+Name: Ahmed Mohamed
 Age: 58
 
-Chief Complaint:
+Case:
 Chest pain
 
-Hidden Information:
-- Started 1 hour ago
-- Pressure-like pain
-- Radiates to left arm
-- Hypertension
-- Diabetes
-- Smoker for 20 years
+Hidden info:
+- started 1 hour ago
+- pressure-like pain
+- radiates left arm
+- smoker
+- diabetes + hypertension
 
 Rules:
-- Answer only as the patient.
-- Never reveal information unless asked.
-- Never reveal diagnosis.
-- Use realistic answers.
-- Short responses.
+- answer as patient only
+- match user language (Arabic/English)
+- realistic answers
+- never reveal diagnosis
 `;
 
 function claimCase(){
 
-document.getElementById("caseBox").classList.remove("hidden");
-document.getElementById("chatBox").classList.remove("hidden");
+document.getElementById("caseBox").style.display="block";
+document.getElementById("chatBox").style.display="block";
 
 document.getElementById("caseBox").innerHTML=`
-
-<h2>📄 الحالة المستلمة</h2>
-
-<p><b>الاسم:</b> أحمد محمد</p>
-
-<p><b>العمر:</b> 58 سنة</p>
-
-<p><b>الشكوى الرئيسية:</b> ألم بالصدر</p>
-
-<p><b>المهمة:</b> قم بأخذ التاريخ المرضي الكامل.</p>
-
+<h3>📄 الحالة</h3>
+<p>Chest Pain Case - Ahmed Mohamed</p>
+<p>ابدأ المقابلة</p>
 `;
 
 messages = [
-{
-role:"system",
-content:patientSystemPrompt
-},
-{
-role:"assistant",
-content:"السلام عليكم، عندي وجع في صدري من حوالي ساعة."
-}
+{role:"system",content:systemPrompt},
+{role:"assistant",content:"السلام عليكم... عندي وجع في صدري من ساعة."}
 ];
 
-document.getElementById("chat").innerHTML=`
-<div class="patient">
-👨‍🦳 السلام عليكم، عندي وجع في صدري من حوالي ساعة.
-</div>
-`;
-
+document.getElementById("chat").innerHTML=
+`<div class="ai">👨‍🦳 عندي وجع في صدري من ساعة</div>`;
 }
 
-async function sendMessage(){
+async function send(){
 
-const apiKey =
-document.getElementById("apiKey").value;
+const apiKey = document.getElementById("apiKey").value;
+if(!apiKey) return alert("ضع API Key");
 
-if(!apiKey){
-alert("ضع مفتاح API");
-return;
-}
-
-const input =
-document.getElementById("message");
-
-const text = input.value.trim();
-
+const text = document.getElementById("input").value;
 if(!text) return;
 
-document.getElementById("chat").innerHTML += `
-<div class="student">
-🧑‍⚕️ ${text}
-</div>
-`;
+messages.push({role:"user",content:text});
 
-messages.push({
-role:"user",
-content:text
-});
+document.getElementById("chat").innerHTML+=
+`<div class="user">🧑‍⚕️ ${text}</div>`;
 
-input.value="";
+document.getElementById("input").value="";
 
-const response = await fetch(
-"https://api.openai.com/v1/chat/completions",
-{
+const res = await fetch("https://api.openai.com/v1/chat/completions",{
 method:"POST",
 headers:{
 "Content-Type":"application/json",
@@ -231,61 +151,25 @@ body:JSON.stringify({
 model:"gpt-4.1-mini",
 messages:messages
 })
-}
-);
-
-const data = await response.json();
-
-const reply =
-data.choices[0].message.content;
-
-messages.push({
-role:"assistant",
-content:reply
 });
 
-document.getElementById("chat").innerHTML += `
-<div class="patient">
-👨‍🦳 ${reply}
-</div>
-`;
+const data = await res.json();
 
+const reply = data.choices[0].message.content;
+
+messages.push({role:"assistant",content:reply});
+
+document.getElementById("chat").innerHTML+=
+`<div class="ai">👨‍🦳 ${reply}</div>`;
 }
 
-async function finishCase(){
+async function finish(){
 
-const apiKey =
-document.getElementById("apiKey").value;
+const apiKey = document.getElementById("apiKey").value;
 
-const evaluationPrompt = `
-You are an OSCE nursing examiner.
+const conversation = messages.map(m=>m.role+": "+m.content).join("\n");
 
-Evaluate the nursing student.
-
-Return HTML only.
-
-Give:
-
-Overall Score /100
-
-Communication
-
-History Taking
-
-Clinical Judgment
-
-Strengths
-
-Weaknesses
-`;
-
-const conversation = messages.map(
-m=>m.role + ": " + m.content
-).join("\n");
-
-const response = await fetch(
-"https://api.openai.com/v1/chat/completions",
-{
+const res = await fetch("https://api.openai.com/v1/chat/completions",{
 method:"POST",
 headers:{
 "Content-Type":"application/json",
@@ -296,7 +180,19 @@ model:"gpt-4.1-mini",
 messages:[
 {
 role:"system",
-content:evaluationPrompt
+content:`
+You are OSCE examiner.
+
+Return ONLY JSON:
+{
+ total: number,
+ communication: number,
+ history: number,
+ clinical: number,
+ strengths: [],
+ weaknesses: []
+}
+`
 },
 {
 role:"user",
@@ -304,24 +200,28 @@ content:conversation
 }
 ]
 })
-}
-);
-
-const data = await response.json();
-
-document.getElementById("resultBox")
-.classList.remove("hidden");
-
-document.getElementById("resultBox")
-.innerHTML =
-data.choices[0].message.content;
-
-window.scrollTo({
-top:document.body.scrollHeight,
-behavior:"smooth"
 });
 
+const data = await res.json();
+
+const result = JSON.parse(data.choices[0].message.content);
+
+document.getElementById("result").innerHTML=`
+<h3>📊 النتيجة</h3>
+<p>Overall: ${result.total}/100</p>
+<p>Communication: ${result.communication}</p>
+<p>History: ${result.history}</p>
+<p>Clinical: ${result.clinical}</p>
+
+<h4>✔️ نقاط القوة</h4>
+<ul>${result.strengths.map(s=>`<li>${s}</li>`).join("")}</ul>
+
+<h4>❌ نقاط الضعف</h4>
+<ul>${result.weaknesses.map(w=>`<li>${w}</li>`).join("")}</ul>
+`;
+
 }
+
 </script>
 
 </body>
